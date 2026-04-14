@@ -3,353 +3,616 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🏆 Champions Forge · VGC 2026</title>
+    <meta name="theme-color" content="#1a3a5c">
+    <title>🏆 Champions Forge · VGC 2026 Team Builder</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
     <style>
-        * { box-sizing: border-box; margin: 0; font-family: system-ui, 'Segoe UI', Roboto, sans-serif; }
-        body {
-            background: linear-gradient(145deg, #060b14 0%, #0f1a2e 100%);
-            min-height: 100vh;
-            padding: 20px;
-            color: #eef2fb;
-        }
-        .app { max-width: 1800px; margin: 0 auto; }
+        * { box-sizing: border-box; margin: 0; font-family: 'Inter', sans-serif; }
         
-        .hero {
+        body {
+            background: #0d1f2d;
+            min-height: 100vh;
+            padding: 24px;
+            color: #e0edf5;
+        }
+        
+        .app {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+        
+        /* Header */
+        .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 28px;
             flex-wrap: wrap;
+            gap: 16px;
         }
-        h1 {
-            font-weight: 800; font-size: 2.5rem;
-            background: linear-gradient(135deg, #8ab4f8, #c58aff);
-            -webkit-background-clip: text; background-clip: text; color: transparent;
-        }
-        .tabs {
-            display: flex; gap: 8px; flex-wrap: wrap;
-        }
-        .tab-btn {
-            background: #1e2a3d; color: #9aafcf; border: none;
-            padding: 12px 24px; border-radius: 40px; font-weight: 600;
-            cursor: pointer; transition: 0.15s; font-size: 0.95rem;
-        }
-        .tab-btn.active {
-            background: #3a5a8c; color: white;
-        }
-        .tab-btn:hover { background: #2d4263; }
-
-        .panel {
-            display: none;
-            background: rgba(15, 22, 36, 0.95);
-            border: 1px solid #2a3a55;
-            border-radius: 28px;
-            padding: 26px;
-            backdrop-filter: blur(8px);
-            box-shadow: 0 20px 40px -10px #00000080;
-        }
-        .panel.active { display: block; }
-
-        .builder-grid {
-            display: grid;
-            grid-template-columns: 1.1fr 1.2fr 1fr;
-            gap: 20px;
-        }
-        .sim-grid {
-            display: grid;
-            grid-template-columns: 1fr 1.5fr 1fr;
-            gap: 20px;
-        }
-        .card {
-            background: rgba(15, 26, 40, 0.9); border-radius: 24px; padding: 20px;
-            border: 1px solid #2d4060; backdrop-filter: blur(8px);
-        }
-        .card h3 {
-            margin: 0 0 16px 0; font-size: 1.1rem;
-            border-bottom: 1px solid #2d4060; padding-bottom: 10px;
-            display: flex; align-items: center; gap: 8px; color: #bdd3ff;
-        }
-
-        select, input {
-            background: #1a2942; color: white; border: 1px solid #3d5680;
-            padding: 10px 14px; border-radius: 40px; font-size: 0.9rem;
-            width: 100%; margin-bottom: 12px;
-        }
-        .search-box {
-            background: #0f1e32; border: 1px solid #3a6090;
-            border-radius: 40px; padding: 12px 18px; color: white;
-            width: 100%; margin-bottom: 12px; font-size: 0.95rem;
-        }
-        .search-box::placeholder { color: #7a9bcb; }
         
-        .poke-select {
-            background: #0f1e32; color: white; border: 1px solid #3a6090;
-            border-radius: 16px; padding: 10px; width: 100%;
-            max-height: 250px; overflow-y: auto; font-size: 0.9rem;
+        .logo h1 {
+            font-weight: 700;
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, #7bc0f8, #a890ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.5px;
+        }
+        
+        .logo .subtitle {
+            color: #7aacd0;
+            font-size: 0.85rem;
+            margin-top: 4px;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            gap: 4px;
+            background: #163a50;
+            padding: 5px;
+            border-radius: 50px;
+        }
+        
+        .nav-tab {
+            background: transparent;
+            color: #a0c8e0;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        
+        .nav-tab.active {
+            background: #4a9ac0;
+            color: white;
+            box-shadow: 0 2px 8px rgba(74, 154, 192, 0.3);
+        }
+        
+        .nav-tab:hover { background: #2a6a90; color: white; }
+        
+        /* Panels */
+        .panel { display: none; }
+        .panel.active { display: block; }
+        
+        /* Main 3-column layout */
+        .builder-layout {
+            display: grid;
+            grid-template-columns: 320px 1fr 380px;
+            gap: 20px;
+        }
+        
+        /* Cards */
+        .card {
+            background: #143548;
+            border-radius: 20px;
+            padding: 20px;
+            border: 1px solid #2a6a90;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .card-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #a0d0f0;
+            margin-bottom: 16px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #2a6a90;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        /* ========== TEAM SECTION (inspired by PokeCounter) ========== */
+        .team-section {
+            background: #0f2838;
+            border-radius: 18px;
+            padding: 18px;
+            margin-bottom: 16px;
+        }
+        
+        .team-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .team-header h3 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #b8dff8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .team-count {
+            background: #1a4a60;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #a0d8f0;
+        }
+        
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        
+        .team-slot {
+            aspect-ratio: 1;
+            background: #0d2430;
+            border: 2px dashed #2a6a90;
+            border-radius: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.15s;
+            position: relative;
+            padding: 8px;
+        }
+        
+        .team-slot.filled {
+            border: 2px solid #5aaac8;
+            background: linear-gradient(145deg, #1a4058, #0e2838);
+        }
+        
+        .team-slot:hover {
+            border-color: #8ac8e8;
+            background: #1a4058;
+        }
+        
+        .team-slot img {
+            width: 58px;
+            height: 58px;
+            image-rendering: crisp-edges;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3));
+        }
+        
+        .team-slot .slot-name {
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: #b0d8f0;
+            margin-top: 4px;
+            text-align: center;
+            text-transform: capitalize;
+        }
+        
+        .team-slot .slot-empty {
+            color: #3a7a9a;
+            font-size: 1.8rem;
+            font-weight: 300;
+        }
+        
+        .team-slot .remove-slot {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: #c05050;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+        
+        .team-slot.filled:hover .remove-slot {
+            display: flex;
+        }
+        
+        .clear-team-btn {
+            width: 100%;
+            margin-top: 12px;
+            background: #2a4058;
+            color: #c0d8f0;
+            border: 1px solid #3a6a90;
+            padding: 10px;
+            border-radius: 30px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.15s;
+        }
+        
+        .clear-team-btn:hover {
+            background: #3a5a78;
+            color: white;
+        }
+        
+        /* ========== POKÉMON SELECTOR ========== */
+        .search-input {
+            width: 100%;
+            background: #0d2430;
+            border: 1px solid #2a6a90;
+            border-radius: 40px;
+            padding: 12px 18px;
+            color: white;
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+        }
+        
+        .search-input::placeholder {
+            color: #6a9ab8;
+        }
+        
+        .pokemon-select {
+            width: 100%;
+            background: #0d2430;
+            color: white;
+            border: 1px solid #2a6a90;
+            border-radius: 14px;
+            padding: 10px;
+            font-size: 0.85rem;
+            max-height: 220px;
+            overflow-y: auto;
+        }
+        
+        .pokemon-select option {
+            padding: 8px;
+            border-radius: 8px;
+        }
+        
+        .type-badges {
+            display: flex;
+            gap: 6px;
+            margin: 12px 0;
+        }
+        
+        .type-badge {
+            padding: 4px 14px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        
+        .type-Normal{background:#9fa19f}.type-Fire{background:#e56b3e}.type-Water{background:#4d90d6}.type-Electric{background:#f2d23b;color:#1e1e2a}.type-Grass{background:#5fbd58}.type-Ice{background:#74cec0}.type-Fighting{background:#c0302c}.type-Poison{background:#a55f9e}.type-Ground{background:#da8e4b}.type-Flying{background:#9aacdd}.type-Psychic{background:#f9708a}.type-Bug{background:#9ebd2e}.type-Rock{background:#bdab66}.type-Ghost{background:#6363b5}.type-Dragon{background:#4f68c7}.type-Dark{background:#595365}.type-Steel{background:#6b8f9e}.type-Fairy{background:#e48fbb}
+        
+        /* Stat sliders */
+        .stat-grid {
+            margin: 16px 0;
         }
         
         .stat-row {
-            display: flex; align-items: center; gap: 12px; margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
         }
+        
         .stat-label {
-            width: 45px; font-weight: 700; text-transform: uppercase; color: #9ab8e6;
+            width: 36px;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: #9ac0e0;
+            font-size: 0.75rem;
         }
+        
         .stat-value {
-            width: 45px; text-align: right; font-family: monospace;
-            background: #0c1420; padding: 4px 8px; border-radius: 40px;
+            width: 36px;
+            text-align: right;
+            background: #0a1c28;
+            padding: 3px 6px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 500;
         }
-        input[type=range] {
-            flex: 1; height: 5px; background: #1f2c44; accent-color: #5f8bdf;
+        
+        .stat-slider {
+            flex: 1;
+            height: 5px;
+            background: #1a4058;
+            border-radius: 10px;
+            accent-color: #5aaac8;
         }
+        
         .sp-summary {
-            display: flex; justify-content: space-between; margin: 15px 0;
-            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #0d2430;
+            padding: 12px;
+            border-radius: 16px;
+            margin: 15px 0;
         }
-
-        button {
-            background: linear-gradient(145deg, #3a5a8c, #1f3a60);
-            border: none; color: white; font-weight: 600;
-            padding: 12px 20px; border-radius: 40px; cursor: pointer;
-            border-bottom: 3px solid #0f1a28; width: 100%;
-            box-shadow: 0 8px 0 #0f1a28, 0 8px 20px rgba(0,0,0,0.3);
+        
+        .sp-total {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        
+        .nature-select, .item-select {
+            width: 100%;
+            background: #0d2430;
+            color: white;
+            border: 1px solid #2a6a90;
+            border-radius: 40px;
+            padding: 10px 16px;
+            font-size: 0.85rem;
+            margin-bottom: 12px;
+        }
+        
+        .add-btn {
+            width: 100%;
+            background: #4a9ac0;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: 0.15s;
+            border-bottom: 3px solid #2a6a90;
+        }
+        
+        .add-btn:hover {
+            background: #5aaac8;
+        }
+        
+        /* Moves section */
+        .moves-header {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+        
+        .move-slot {
+            background: #1a4058;
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #b0d8f0;
+        }
+        
+        .move-slot.filled {
+            background: #3a6a90;
+            color: white;
+        }
+        
+        .move-list {
+            max-height: 240px;
+            overflow-y: auto;
+            margin-top: 12px;
+        }
+        
+        .move-item {
+            padding: 10px 14px;
+            border-bottom: 1px solid #2a5070;
+            cursor: pointer;
+            border-radius: 10px;
+            font-size: 0.85rem;
             transition: 0.1s;
         }
-        button:active { transform: translateY(5px); box-shadow: 0 3px 0 #0f1a28, 0 8px 20px rgba(0,0,0,0.3); }
         
-        .battle-count-btn {
-            padding: 8px; font-size: 0.85rem; margin: 3px;
+        .move-item:hover {
+            background: #1a4058;
         }
-        .battle-count-btn.active { background: #5f8bdf; }
-
-        .move-list {
-            max-height: 300px; overflow-y: auto; margin-top: 12px;
+        
+        .move-item.selected {
+            background: #3a6a90;
+            border-left: 4px solid #8ac8e8;
         }
-        .move-item {
-            padding: 8px 12px; border-bottom: 1px solid #233153;
-            cursor: pointer; border-radius: 8px;
+        
+        /* Damage section */
+        .damage-card {
+            background: #0d2430;
+            border-radius: 16px;
+            padding: 18px;
+            margin-top: 18px;
         }
-        .move-item:hover { background: #1f3152; }
-        .move-item.selected { background: #2a4a7a; border-left: 4px solid #8ab4f8; }
-
-        .damage-box {
-            background: #0c1420; border-radius: 16px; padding: 16px;
-            margin-top: 16px; border-left: 4px solid #5f8bdf;
+        
+        .damage-result {
+            background: #0a1c28;
+            border-radius: 12px;
+            padding: 16px;
+            border-left: 4px solid #5aaac8;
+            margin-top: 12px;
         }
-
-        .threat-item {
-            display: flex; justify-content: space-between; padding: 8px 12px;
-            border-bottom: 1px solid #25355a; border-radius: 8px;
+        
+        .calculate-btn {
+            width: 100%;
+            background: #3a7a9a;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 12px;
         }
-        .threat-item.strong { background: #1a3a2a; border-left: 4px solid #4eef7e; }
-        .threat-item.weak { background: #3a1a1a; border-left: 4px solid #ef4e4e; }
-        .threat-item.neutral { border-left: 4px solid #efb84e; }
-
-        .type-badge {
-            display: inline-block; padding: 4px 12px; border-radius: 30px;
-            font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
-            margin-right: 5px;
+        
+        /* Credits */
+        .credits-panel {
+            text-align: center;
+            padding: 40px;
         }
-        .type-Normal{background:#9fa19f}.type-Fire{background:#e56b3e}.type-Water{background:#4d90d6}.type-Electric{background:#f2d23b;color:#1e1e2a}.type-Grass{background:#5fbd58}.type-Ice{background:#74cec0}.type-Fighting{background:#c0302c}.type-Poison{background:#a55f9e}.type-Ground{background:#da8e4b}.type-Flying{background:#9aacdd}.type-Psychic{background:#f9708a}.type-Bug{background:#9ebd2e}.type-Rock{background:#bdab66}.type-Ghost{background:#6363b5}.type-Dragon{background:#4f68c7}.type-Dark{background:#595365}.type-Steel{background:#6b8f9e}.type-Fairy{background:#e48fbb}
-
-        .team-slot {
-            background: #1a2942; border-radius: 12px; padding: 12px;
-            margin-bottom: 8px; cursor: pointer; border: 1px solid #3d5680;
-        }
-        .team-slot.selected { border: 2px solid #5f8bdf; background: #1f3152; }
-        .team-slot span { color: #9ab8e6; }
-
-        .score-badge {
-            font-size: 2rem; font-weight: 700; text-align: center;
-            padding: 20px; border-radius: 20px;
-        }
-        .score-good { background: #1a3a2a; color: #4eef7e; }
-        .score-ok { background: #3a2a1a; color: #efb84e; }
-        .score-bad { background: #3a1a1a; color: #ef4e4e; }
-
-        .credits-content { text-align: center; padding: 40px; }
+        
         .credit-card {
-            background: #0f1a28; border-radius: 20px; padding: 24px;
-            max-width: 500px; margin: 20px auto; border: 1px solid #3a5a8c;
+            background: #143548;
+            border-radius: 20px;
+            padding: 24px;
+            max-width: 400px;
+            margin: 20px auto;
+            border: 1px solid #2a6a90;
         }
-        .credit-card a { color: #8ab4f8; text-decoration: none; }
+        
+        .credit-card a {
+            color: #7bc0f8;
+            text-decoration: none;
+        }
     </style>
 </head>
 <body>
 <div class="app">
-    <div class="hero">
-        <h1>⚔️ Champions Forge</h1>
-        <div class="tabs">
-            <button class="tab-btn active" data-tab="builder">🧬 Builder</button>
-            <button class="tab-btn" data-tab="simulator">🔮 Simulator</button>
-            <button class="tab-btn" data-tab="matchup">📊 Matchups</button>
-            <button class="tab-btn" data-tab="meta">📈 Meta</button>
-            <button class="tab-btn" data-tab="leads">🎯 Leads</button>
-            <button class="tab-btn" data-tab="credits">👤 Credits</button>
+    <!-- Header -->
+    <div class="header">
+        <div class="logo">
+            <h1>⚔️ Champions Forge</h1>
+            <div class="subtitle">VGC 2026 · Pokémon Champions Team Builder</div>
+        </div>
+        <div class="nav-tabs">
+            <button class="nav-tab active" data-tab="builder">🧬 Builder</button>
+            <button class="nav-tab" data-tab="simulator">🔮 Simulator</button>
+            <button class="nav-tab" data-tab="matchup">📊 Matchups</button>
+            <button class="nav-tab" data-tab="credits">👤 Credits</button>
         </div>
     </div>
 
-    <!-- BUILDER PANEL -->
+    <!-- Builder Panel -->
     <div id="builder" class="panel active">
-        <div class="builder-grid">
+        <div class="builder-layout">
+            <!-- LEFT: Pokémon Selection & Configuration -->
             <div class="card">
-                <h3>🔷 POKÉMON & SP</h3>
-                <input type="text" class="search-box" id="pokeSearch" placeholder="🔍 Search Pokémon...">
-                <select id="pokeSelect" class="poke-select" size="8"></select>
-                <div id="typeDisplay" style="margin: 12px 0;"></div>
-                <select id="itemSelect" class="search-box"></select>
-                <div id="itemEffect" style="font-size:0.8rem; color:#9ab8e6; margin-bottom:12px;"></div>
-                <div class="stat-row"><span class="stat-label">HP</span> <input type="range" id="hpSlider" min="0" max="32" value="4"> <span class="stat-value" id="hpVal">4</span></div>
-                <div class="stat-row"><span class="stat-label">Atk</span> <input type="range" id="atkSlider" min="0" max="32" value="28"> <span class="stat-value" id="atkVal">28</span></div>
-                <div class="stat-row"><span class="stat-label">Def</span> <input type="range" id="defSlider" min="0" max="32" value="0"> <span class="stat-value" id="defVal">0</span></div>
-                <div class="stat-row"><span class="stat-label">SpA</span> <input type="range" id="spaSlider" min="0" max="32" value="0"> <span class="stat-value" id="spaVal">0</span></div>
-                <div class="stat-row"><span class="stat-label">SpD</span> <input type="range" id="spdSlider" min="0" max="32" value="0"> <span class="stat-value" id="spdVal">0</span></div>
-                <div class="stat-row"><span class="stat-label">Spe</span> <input type="range" id="speSlider" min="0" max="32" value="34"> <span class="stat-value" id="speVal">34</span></div>
+                <div class="card-title">🔷 POKÉMON</div>
+                
+                <input type="text" class="search-input" id="pokeSearch" placeholder="🔍 Search...">
+                <select id="pokeSelect" class="pokemon-select" size="5"></select>
+                
+                <div class="type-badges" id="typeDisplay"></div>
+                
+                <div class="card-title" style="margin-top:20px;">⚙️ STAT POINTS</div>
+                <div class="stat-grid">
+                    <div class="stat-row"><span class="stat-label">HP</span> <input type="range" class="stat-slider" id="hpSlider" min="0" max="32" value="4"> <span class="stat-value" id="hpVal">4</span></div>
+                    <div class="stat-row"><span class="stat-label">Atk</span> <input type="range" class="stat-slider" id="atkSlider" min="0" max="32" value="28"> <span class="stat-value" id="atkVal">28</span></div>
+                    <div class="stat-row"><span class="stat-label">Def</span> <input type="range" class="stat-slider" id="defSlider" min="0" max="32" value="0"> <span class="stat-value" id="defVal">0</span></div>
+                    <div class="stat-row"><span class="stat-label">SpA</span> <input type="range" class="stat-slider" id="spaSlider" min="0" max="32" value="0"> <span class="stat-value" id="spaVal">0</span></div>
+                    <div class="stat-row"><span class="stat-label">SpD</span> <input type="range" class="stat-slider" id="spdSlider" min="0" max="32" value="0"> <span class="stat-value" id="spdVal">0</span></div>
+                    <div class="stat-row"><span class="stat-label">Spe</span> <input type="range" class="stat-slider" id="speSlider" min="0" max="32" value="34"> <span class="stat-value" id="speVal">34</span></div>
+                </div>
+                
                 <div class="sp-summary">
-                    <span>SP: <span id="spTotal">66</span>/66</span>
-                    <span id="spWarning" style="color:#7effb0;">✓ Valid</span>
-                    <select id="natureSelect" class="search-box" style="width:auto; margin:0;"></select>
+                    <span class="sp-total">SP: <span id="spTotal">66</span>/66</span>
+                    <span id="spWarning" style="color:#7effb0;">✓</span>
                 </div>
-                <button id="addToTeamBtn">➕ Add to Team</button>
+                
+                <select id="natureSelect" class="nature-select"></select>
+                <select id="itemSelect" class="item-select"></select>
+                
+                <button class="add-btn" id="addToTeamBtn">➕ Add to Team</button>
             </div>
-            <div class="card">
-                <h3>⚡ MOVES (Click up to 4)</h3>
-                <div id="selectedMovesDisplay" style="display:flex; gap:5px; flex-wrap:wrap; margin-bottom:12px;"></div>
-                <input type="text" class="search-box" id="moveSearch" placeholder="🔍 Filter moves...">
-                <div class="move-list" id="moveList"></div>
+            
+            <!-- MIDDLE: Team Display + Moves -->
+            <div>
+                <!-- Team Section -->
+                <div class="team-section">
+                    <div class="team-header">
+                        <h3>👥 YOUR TEAM</h3>
+                        <span class="team-count"><span id="teamCountDisplay">0</span>/6</span>
+                    </div>
+                    <div class="team-grid" id="teamGrid">
+                        <!-- Team slots will be rendered here -->
+                    </div>
+                    <button class="clear-team-btn" id="clearTeamBtn">🗑️ Clear Team</button>
+                </div>
+                
+                <!-- Moves Section -->
+                <div class="card" style="margin-top:16px;">
+                    <div class="card-title">⚡ MOVES</div>
+                    <div class="moves-header" id="selectedMovesDisplay"></div>
+                    <input type="text" class="search-input" id="moveSearch" placeholder="🔍 Filter moves...">
+                    <div class="move-list" id="moveList"></div>
+                </div>
             </div>
+            
+            <!-- RIGHT: Damage Calculator -->
             <div class="card">
-                <h3>🎯 DAMAGE CALC</h3>
-                <select id="opponentSelect" class="search-box"></select>
-                <button id="calcDamageBtn">🔥 Calculate</button>
-                <div class="damage-box" id="damageResult">Select a move and opponent</div>
-                <h3 style="margin-top:20px;">👥 YOUR TEAM</h3>
-                <div id="teamDisplay"></div>
-                <button id="clearTeamBtn" style="margin-top:10px; background:#4a2a4a;">🗑️ Clear Team</button>
+                <div class="card-title">🎯 DAMAGE CALCULATOR</div>
+                
+                <label style="color:#b0d8f0; font-size:0.85rem;">Opponent</label>
+                <select id="opponentSelect" class="nature-select"></select>
+                
+                <button class="calculate-btn" id="calcDamageBtn">🔥 Calculate Damage</button>
+                
+                <div class="damage-result" id="damageResult">
+                    Select a move and opponent
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- SIMULATOR PANEL -->
+    <!-- Simulator Panel -->
     <div id="simulator" class="panel">
-        <div class="sim-grid">
+        <div class="builder-layout">
             <div class="card">
-                <h3>👥 YOUR TEAM</h3>
+                <div class="card-title">👥 YOUR TEAM</div>
                 <div id="simTeamDisplay"></div>
-                <p style="color:#8ab8ff; margin-top:15px;"><span id="teamCount">0</span>/6 Pokémon</p>
-                <button id="simClearTeamBtn" style="background:#4a2a4a;">🗑️ Clear Team</button>
+                <button class="clear-team-btn" id="simClearBtn">🗑️ Clear</button>
             </div>
             <div class="card">
-                <h3>⚙️ CONFIGURATION</h3>
-                <label style="color:#bdd3ff;">FORMAT</label>
-                <select id="simFormat" class="search-box">
-                    <option value="2v2">2V2 · BRING 4</option>
-                    <option value="1v1">1V1 · BRING 3</option>
+                <div class="card-title">⚙️ SIMULATION</div>
+                <select id="simOpponentPool" class="nature-select">
+                    <option value="meta">🔥 Meta (Top 20)</option>
+                    <option value="sun">☀️ Sun</option>
+                    <option value="rain">🌧️ Rain</option>
+                    <option value="sand">🏖️ Sand</option>
                 </select>
-                <label style="color:#bdd3ff; margin-top:15px;">OPPONENT POOL</label>
-                <select id="simOpponentPool" class="search-box">
-                    <option value="meta">🔥 META (Top 20)</option>
-                    <option value="mixed">🌈 MIXED (All)</option>
-                    <option value="sun">☀️ SUN</option>
-                    <option value="rain">🌧️ RAIN</option>
-                    <option value="sand">🏖️ SAND</option>
-                    <option value="trickroom">⏱️ TRICK ROOM</option>
-                    <option value="tailwind">💨 TAILWIND</option>
-                    <option value="hyperoffense">⚔️ HYPER OFFENSE</option>
-                    <option value="bulky">🛡️ BULKY</option>
-                </select>
-                <label style="color:#bdd3ff; margin-top:15px;">BATTLES</label>
-                <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:5px;">
-                    <button class="battle-count-btn" data-count="100">100</button>
-                    <button class="battle-count-btn" data-count="500">500</button>
-                    <button class="battle-count-btn" data-count="1000">1000</button>
-                    <button class="battle-count-btn active" data-count="2500">2500</button>
-                    <button class="battle-count-btn" data-count="5000">5000</button>
-                    <button class="battle-count-btn" data-count="10000">10000</button>
-                </div>
-                <button id="runSimBtn" style="margin-top:20px; background:linear-gradient(145deg,#5f9eff,#2a4a8c);">🚀 RUN SIMULATION</button>
+                <button class="add-btn" id="runSimBtn" style="margin-top:20px;">🚀 Run Simulation</button>
             </div>
             <div class="card">
-                <h3>📊 RESULTS</h3>
-                <div id="simResults"><p style="color:#9ab8e6;">Run a simulation to see results</p></div>
+                <div class="card-title">📊 RESULTS</div>
+                <div id="simResults">Ready to simulate</div>
             </div>
         </div>
     </div>
 
-    <!-- MATCHUP ANALYZER -->
+    <!-- Matchup Panel -->
     <div id="matchup" class="panel">
-        <h2 style="margin-top:0;">📊 Team vs. Meta Analysis</h2>
-        <div style="display:grid; grid-template-columns:1fr 2fr; gap:20px;">
-            <div class="card">
-                <h3>🎯 Team Score</h3>
-                <div id="teamScore" class="score-badge">--</div>
-                <h3 style="margin-top:20px;">🛡️ Type Coverage</h3>
-                <div id="typeCoverage"></div>
-            </div>
-            <div class="card">
-                <h3>🔥 Top Meta Threats</h3>
-                <div id="matchupThreats"></div>
-            </div>
+        <div class="card">
+            <div class="card-title">📊 Meta Matchup Analysis</div>
+            <div id="matchupContent">Add Pokémon to analyze matchups</div>
         </div>
     </div>
 
-    <!-- META OVERVIEW -->
-    <div id="meta" class="panel">
-        <h2 style="margin-top:0;">📈 Pikalytics Meta</h2>
-        <p id="metaLastUpdated" style="color:#9ab8e6;"></p>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
-            <div class="card"><h3>📊 Top Usage</h3><div id="metaUsage"></div></div>
-            <div class="card"><h3>🏆 Teams</h3><div id="metaTeams"></div></div>
-        </div>
-    </div>
-
-    <!-- LEAD RECOMMENDER -->
-    <div id="leads" class="panel">
-        <h2 style="margin-top:0;">🎯 Lead Recommendations</h2>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
-            <div class="card"><h3>👑 Your Team</h3><div id="leadsTeamDisplay"></div></div>
-            <div class="card"><h3>⭐ Recommended</h3><div id="leadRecommendations"></div></div>
-        </div>
-    </div>
-
-    <!-- CREDITS -->
+    <!-- Credits Panel -->
     <div id="credits" class="panel">
-        <div class="credits-content">
-            <h2>👤 Credits</h2>
-            <div class="credit-card"><h3 style="color:#c58aff;">j4pn</h3><p>Creator · Discord: j4pn_</p></div>
-            <div class="credit-card"><h3 style="color:#8ab4f8;">RoiDadadou</h3><p>Data · @lepenseuradimir</p></div>
-            <div class="credit-card"><h3 style="color:#7effb0;">Serebii & Pikalytics</h3><p>Data sources</p></div>
+        <div class="credits-panel">
+            <h2 style="color:#b8d8f8; margin-bottom:30px;">👤 Credits</h2>
+            <div class="credit-card">
+                <h3 style="color:#c58aff;">j4pn</h3>
+                <p>Creator & Developer<br>Discord: j4pn_</p>
+            </div>
+            <div class="credit-card">
+                <h3 style="color:#8ac4ff;">RoiDadadou</h3>
+                <p>Data Provider<br>@lepenseuradimir</p>
+            </div>
+            <div class="credit-card">
+                <h3 style="color:#7effb0;">Serebii & Pikalytics</h3>
+                <p>Data Sources</p>
+            </div>
+            <p style="margin-top:30px; opacity:0.7;">Champions Forge · Built for the VGC community</p>
         </div>
     </div>
 </div>
 
 <script>
 // ============================================
-// COMPLETE DATABASE - ALL 205 POKÉMON
+// DATABASE - PASTE YOUR FULL DATABASE HERE
 // ============================================
 const DB = {
-  pokemon: {},
-  typeChart: {
-    "Normal":{"Rock":0.5,"Ghost":0,"Steel":0.5},"Fire":{"Fire":0.5,"Water":0.5,"Grass":2,"Ice":2,"Bug":2,"Rock":0.5,"Dragon":0.5,"Steel":2,"Fairy":2},
-    "Water":{"Fire":2,"Water":0.5,"Grass":0.5,"Ground":2,"Rock":2,"Dragon":0.5},"Electric":{"Water":2,"Electric":0.5,"Grass":0.5,"Ground":0,"Flying":2,"Dragon":0.5},
-    "Grass":{"Fire":0.5,"Water":2,"Grass":0.5,"Poison":0.5,"Ground":2,"Flying":0.5,"Bug":0.5,"Rock":2,"Dragon":0.5,"Steel":0.5},
-    "Ice":{"Fire":0.5,"Water":0.5,"Grass":2,"Ice":0.5,"Ground":2,"Flying":2,"Dragon":2,"Steel":0.5},
-    "Fighting":{"Normal":2,"Ice":2,"Poison":0.5,"Flying":0.5,"Psychic":0.5,"Bug":0.5,"Rock":2,"Ghost":0,"Dark":2,"Steel":2,"Fairy":0.5},
-    "Poison":{"Grass":2,"Poison":0.5,"Ground":0.5,"Rock":0.5,"Ghost":0.5,"Steel":0,"Fairy":2},
-    "Ground":{"Fire":2,"Electric":0,"Grass":0.5,"Poison":2,"Flying":0,"Bug":0.5,"Rock":2,"Steel":2},
-    "Flying":{"Electric":0.5,"Grass":2,"Fighting":2,"Bug":2,"Rock":0.5,"Steel":0.5},
-    "Psychic":{"Fighting":2,"Poison":2,"Psychic":0.5,"Dark":0,"Steel":0.5},
-    "Bug":{"Fire":0.5,"Grass":2,"Fighting":0.5,"Poison":0.5,"Flying":0.5,"Psychic":2,"Ghost":0.5,"Dark":2,"Steel":0.5,"Fairy":0.5},
-    "Rock":{"Fire":2,"Ice":2,"Fighting":0.5,"Ground":0.5,"Flying":2,"Bug":2,"Steel":0.5},
-    "Ghost":{"Normal":0,"Psychic":2,"Ghost":2,"Dark":0.5},"Dragon":{"Dragon":2,"Steel":0.5,"Fairy":0},
-    "Dark":{"Fighting":0.5,"Psychic":2,"Ghost":0.5,"Dark":0.5,"Fairy":0.5},
-    "Steel":{"Fire":0.5,"Water":0.5,"Electric":0.5,"Ice":2,"Rock":2,"Steel":0.5,"Fairy":2},
-    "Fairy":{"Fire":0.5,"Fighting":2,"Poison":0.5,"Dragon":2,"Dark":2,"Steel":0.5}
-  }
-};
-
-// Load your CHAMPIONS_DATABASE here - paste the entire object from champions_database_complete.js
-// For now, sample data:
-DB.pokemon = {
+  pokemon: {
     {
     "Venusaur": {
       "types": [
@@ -16128,172 +16391,231 @@ DB.pokemon = {
       ]
     }
   },
-    // PASTE YOUR FULL DATABASE HERE
+    
+  },
+  typeChart: {
+    "Normal":{"Rock":0.5,"Ghost":0,"Steel":0.5},"Fire":{"Fire":0.5,"Water":0.5,"Grass":2,"Ice":2,"Bug":2,"Rock":0.5,"Dragon":0.5,"Steel":2,"Fairy":2},
+    "Water":{"Fire":2,"Water":0.5,"Grass":0.5,"Ground":2,"Rock":2,"Dragon":0.5},"Electric":{"Water":2,"Electric":0.5,"Grass":0.5,"Ground":0,"Flying":2,"Dragon":0.5},
+    "Grass":{"Fire":0.5,"Water":2,"Grass":0.5,"Poison":0.5,"Ground":2,"Flying":0.5,"Bug":0.5,"Rock":2,"Dragon":0.5,"Steel":0.5},
+    "Ice":{"Fire":0.5,"Water":0.5,"Grass":2,"Ice":0.5,"Ground":2,"Flying":2,"Dragon":2,"Steel":0.5},
+    "Fighting":{"Normal":2,"Ice":2,"Poison":0.5,"Flying":0.5,"Psychic":0.5,"Bug":0.5,"Rock":2,"Ghost":0,"Dark":2,"Steel":2,"Fairy":0.5},
+    "Poison":{"Grass":2,"Poison":0.5,"Ground":0.5,"Rock":0.5,"Ghost":0.5,"Steel":0,"Fairy":2},
+    "Ground":{"Fire":2,"Electric":0,"Grass":0.5,"Poison":2,"Flying":0,"Bug":0.5,"Rock":2,"Steel":2},
+    "Flying":{"Electric":0.5,"Grass":2,"Fighting":2,"Bug":2,"Rock":0.5,"Steel":0.5},
+    "Psychic":{"Fighting":2,"Poison":2,"Psychic":0.5,"Dark":0,"Steel":0.5},
+    "Bug":{"Fire":0.5,"Grass":2,"Fighting":0.5,"Poison":0.5,"Flying":0.5,"Psychic":2,"Ghost":0.5,"Dark":2,"Steel":0.5,"Fairy":0.5},
+    "Rock":{"Fire":2,"Ice":2,"Fighting":0.5,"Ground":0.5,"Flying":2,"Bug":2,"Steel":0.5},
+    "Ghost":{"Normal":0,"Psychic":2,"Ghost":2,"Dark":0.5},"Dragon":{"Dragon":2,"Steel":0.5,"Fairy":0},
+    "Dark":{"Fighting":0.5,"Psychic":2,"Ghost":0.5,"Dark":0.5,"Fairy":0.5},
+    "Steel":{"Fire":0.5,"Water":0.5,"Electric":0.5,"Ice":2,"Rock":2,"Steel":0.5,"Fairy":2},
+    "Fairy":{"Fire":0.5,"Fighting":2,"Poison":0.5,"Dragon":2,"Dark":2,"Steel":0.5}
+  }
 };
 
-// All natures with indicators
 const NATURES = {
     "Hardy": {mod:"Neutral"},
     "Adamant": {mod:"+Atk, -SpA", atk:1.1, spa:0.9},
     "Jolly": {mod:"+Spe, -SpA", spe:1.1, spa:0.9},
     "Modest": {mod:"+SpA, -Atk", spa:1.1, atk:0.9},
-    "Timid": {mod:"+Spe, -Atk", spe:1.1, atk:0.9},
-    "Bold": {mod:"+Def, -Atk", def:1.1, atk:0.9},
-    "Calm": {mod:"+SpD, -Atk", spd:1.1, atk:0.9},
-    "Careful": {mod:"+SpD, -SpA", spd:1.1, spa:0.9},
-    "Impish": {mod:"+Def, -SpA", def:1.1, spa:0.9}
+    "Timid": {mod:"+Spe, -Atk", spe:1.1, atk:0.9}
 };
 
 const ITEMS = {
     "None":"", "Sitrus Berry":"Restores 25% HP", "Leftovers":"Heals 1/16 per turn",
-    "Venusaurite":"Mega Venusaur", "Charizardite X":"Mega Charizard X", "Charizardite Y":"Mega Charizard Y"
+    "Choice Scarf":"Speed x1.5", "Life Orb":"Power x1.3"
 };
-
-let META_DATA = { lastUpdated: "2026-04-14", usage: {"Incineroar":48,"Floette":42,"Garchomp":38}, teams: [] };
 
 // App state
 let currentPokemon = 'Incineroar';
 let selectedMoves = [];
 let userTeam = [];
-let selectedBattleCount = 2500;
 
-const sliders = { hp: document.getElementById('hpSlider'), atk: document.getElementById('atkSlider'), def: document.getElementById('defSlider'), spa: document.getElementById('spaSlider'), spd: document.getElementById('spdSlider'), spe: document.getElementById('speSlider') };
-const vals = { hp: document.getElementById('hpVal'), atk: document.getElementById('atkVal'), def: document.getElementById('defVal'), spa: document.getElementById('spaVal'), spd: document.getElementById('spdVal'), spe: document.getElementById('speVal') };
+// Sprite URL helper
+function getSpriteUrl(name) {
+    const clean = name.toLowerCase().replace(/[^a-z0-9]/g, '');
+    return `https://img.pokemondb.net/sprites/scarlet-violet/normal/${clean}.png`;
+}
 
 // Initialize
 function init() {
     populateNatures();
     populateSelects();
-    updatePokemon();
-    for (let s of ['hp','atk','def','spa','spd','spe']) sliders[s].addEventListener('input', enforceLimits);
+    renderTeamSlots();
+    
     document.getElementById('pokeSearch').addEventListener('input', filterPokemon);
     document.getElementById('pokeSelect').addEventListener('change', updatePokemon);
-    document.getElementById('itemSelect').addEventListener('change', ()=> document.getElementById('itemEffect').textContent = ITEMS[document.getElementById('itemSelect').value] || '');
-    document.getElementById('natureSelect').addEventListener('change', calculateDamage);
-    document.getElementById('opponentSelect').addEventListener('change', calculateDamage);
-    document.getElementById('calcDamageBtn').addEventListener('click', calculateDamage);
-    document.getElementById('moveSearch').addEventListener('input', renderMoveList);
     document.getElementById('addToTeamBtn').addEventListener('click', addToTeam);
     document.getElementById('clearTeamBtn').addEventListener('click', clearTeam);
-    document.getElementById('runSimBtn').addEventListener('click', runSimulation);
-    document.querySelectorAll('.battle-count-btn').forEach(btn => btn.addEventListener('click', (e) => {
-        document.querySelectorAll('.battle-count-btn').forEach(b => b.classList.remove('active'));
-        e.target.classList.add('active');
-        selectedBattleCount = parseInt(e.target.dataset.count);
-    }));
-    document.querySelectorAll('.tab-btn').forEach(btn => btn.addEventListener('click', switchTab));
+    document.getElementById('moveSearch').addEventListener('input', renderMoveList);
+    
+    ['hp','atk','def','spa','spd','spe'].forEach(s => {
+        document.getElementById(s+'Slider').addEventListener('input', enforceLimits);
+    });
+    
+    document.querySelectorAll('.nav-tab').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById(btn.dataset.tab).classList.add('active');
+        });
+    });
+    
     updateSP();
+    filterPokemon();
 }
 
 function populateNatures() {
     const select = document.getElementById('natureSelect');
-    Object.entries(NATURES).forEach(([name, data]) => select.add(new Option(`${name} (${data.mod})`, name)));
+    Object.entries(NATURES).forEach(([name, data]) => {
+        select.add(new Option(`${name} (${data.mod})`, name));
+    });
 }
 
 function populateSelects() {
     const pokeSelect = document.getElementById('pokeSelect');
     const oppSelect = document.getElementById('opponentSelect');
     const itemSelect = document.getElementById('itemSelect');
-    Object.keys(DB.pokemon).sort().forEach(p => { pokeSelect.add(new Option(p, p)); oppSelect.add(new Option(p, p)); });
+    Object.keys(DB.pokemon).sort().forEach(p => {
+        pokeSelect.add(new Option(p, p));
+        oppSelect.add(new Option(p, p));
+    });
     Object.keys(ITEMS).forEach(i => itemSelect.add(new Option(i, i)));
 }
 
 function filterPokemon() {
     const search = document.getElementById('pokeSearch').value.toLowerCase();
-    const pokeSelect = document.getElementById('pokeSelect');
-    pokeSelect.innerHTML = '';
-    Object.keys(DB.pokemon).filter(p => p.toLowerCase().includes(search)).sort().forEach(p => pokeSelect.add(new Option(p, p)));
-    if (pokeSelect.options.length > 0) { pokeSelect.value = pokeSelect.options[0].value; updatePokemon(); }
+    const select = document.getElementById('pokeSelect');
+    select.innerHTML = '';
+    Object.keys(DB.pokemon).filter(p => p.toLowerCase().includes(search)).sort().forEach(p => {
+        select.add(new Option(p, p));
+    });
+    if (select.options.length > 0) {
+        select.value = select.options[0].value;
+        updatePokemon();
+    }
 }
 
 function updatePokemon() {
     currentPokemon = document.getElementById('pokeSelect').value;
     const data = DB.pokemon[currentPokemon];
     if (!data) return;
-    document.getElementById('typeDisplay').innerHTML = data.types.map(t => `<span class="type-badge type-${t}">${t}</span>`).join('');
+    document.getElementById('typeDisplay').innerHTML = data.types.map(t => 
+        `<span class="type-badge type-${t}">${t}</span>`
+    ).join('');
     selectedMoves = [];
     renderMoveList();
-    updateSelectedMovesDisplay();
+    updateMovesDisplay();
 }
 
 function renderMoveList() {
     const data = DB.pokemon[currentPokemon];
     const search = document.getElementById('moveSearch').value.toLowerCase();
     const filtered = data.legalMoves.filter(m => m.toLowerCase().includes(search));
-    document.getElementById('moveList').innerHTML = filtered.map(m => `<div class="move-item ${selectedMoves.includes(m)?'selected':''}" data-move="${m}">${m}</div>`).join('');
-    document.querySelectorAll('.move-item').forEach(el => el.addEventListener('click', ()=>{
-        const m = el.dataset.move;
-        selectedMoves.includes(m) ? selectedMoves = selectedMoves.filter(x=>x!==m) : (selectedMoves.length<4 && selectedMoves.push(m));
-        updateSelectedMovesDisplay(); renderMoveList(); calculateDamage();
+    document.getElementById('moveList').innerHTML = filtered.map(m => 
+        `<div class="move-item ${selectedMoves.includes(m)?'selected':''}" data-move="${m}">${m}</div>`
+    ).join('');
+    document.querySelectorAll('.move-item').forEach(el => el.addEventListener('click', (e) => {
+        const m = e.target.dataset.move;
+        if (selectedMoves.includes(m)) {
+            selectedMoves = selectedMoves.filter(x => x !== m);
+        } else if (selectedMoves.length < 4) {
+            selectedMoves.push(m);
+        }
+        updateMovesDisplay();
+        renderMoveList();
     }));
 }
 
-function updateSelectedMovesDisplay() {
+function updateMovesDisplay() {
     const d = document.getElementById('selectedMovesDisplay');
     let html = '';
-    for (let i=0; i<4; i++) html += `<span class="type-badge" style="background:${i<selectedMoves.length?'#3a5a8c':'#2a3a55'}">${i<selectedMoves.length?selectedMoves[i]:i+1}</span>`;
+    for (let i=0; i<4; i++) {
+        html += `<span class="move-slot ${i<selectedMoves.length?'filled':''}">${i<selectedMoves.length?selectedMoves[i]:'Move '+(i+1)}</span>`;
+    }
     d.innerHTML = html;
 }
 
 function enforceLimits() {
-    let total=0; const stats=['hp','atk','def','spa','spd','spe'];
-    for (let s of stats) { let v=parseInt(sliders[s].value); if(v>32) sliders[s].value=32; total+=parseInt(sliders[s].value); }
-    if (total>66) { let excess=total-66; for (let s of stats.reverse()) { let cur=parseInt(sliders[s].value), reduce=Math.min(cur,excess); if(reduce>0){ sliders[s].value=cur-reduce; excess-=reduce; } if(excess<=0) break; } }
+    let total = 0;
+    const stats = ['hp','atk','def','spa','spd','spe'];
+    for (let s of stats) {
+        let v = parseInt(document.getElementById(s+'Slider').value);
+        if (v > 32) document.getElementById(s+'Slider').value = 32;
+        total += parseInt(document.getElementById(s+'Slider').value);
+    }
+    if (total > 66) {
+        let excess = total - 66;
+        for (let s of stats.reverse()) {
+            let cur = parseInt(document.getElementById(s+'Slider').value);
+            let reduce = Math.min(cur, excess);
+            if (reduce > 0) {
+                document.getElementById(s+'Slider').value = cur - reduce;
+                excess -= reduce;
+            }
+            if (excess <= 0) break;
+        }
+    }
     updateSP();
 }
 
 function updateSP() {
-    let total=0;
-    for (let s of ['hp','atk','def','spa','spd','spe']) { total+=parseInt(sliders[s].value); vals[s].textContent=sliders[s].value; }
-    document.getElementById('spTotal').textContent=total;
-    const w=document.getElementById('spWarning');
-    w.innerHTML=total===66?'✓ Valid 66':`⚠️ ${total}/66`;
-    w.style.color=total===66?'#7effb0':'#ff9f8f';
-}
-
-function calculateDamage() {
-    const poke=document.getElementById('pokeSelect').value, opp=document.getElementById('opponentSelect').value;
-    const data=DB.pokemon[poke], oppData=DB.pokemon[opp];
-    if (!data||!oppData||selectedMoves.length===0) { document.getElementById('damageResult').innerHTML='Select a move and opponent'; return; }
-    document.getElementById('damageResult').innerHTML=`<strong>${poke}</strong> (${selectedMoves[0]}) vs <strong>${opp}</strong><br>~${Math.floor(Math.random()*50)+30}% damage`;
+    let total = 0;
+    ['hp','atk','def','spa','spd','spe'].forEach(s => {
+        const val = document.getElementById(s+'Slider').value;
+        document.getElementById(s+'Val').textContent = val;
+        total += parseInt(val);
+    });
+    document.getElementById('spTotal').textContent = total;
+    const w = document.getElementById('spWarning');
+    w.innerHTML = total === 66 ? '✓' : `⚠️ ${total}/66`;
+    w.style.color = total === 66 ? '#7effb0' : '#ff9f8f';
 }
 
 function addToTeam() {
-    const poke=document.getElementById('pokeSelect').value;
-    if (userTeam.length>=6) { alert('Team full'); return; }
-    if (userTeam.some(p=>p.name===poke)) { alert('No duplicates'); return; }
-    userTeam.push({ name:poke, moves:[...selectedMoves] });
-    updateTeamDisplay();
-    document.getElementById('teamCount').textContent = userTeam.length;
+    if (userTeam.length >= 6) { alert('Team full!'); return; }
+    if (userTeam.some(p => p.name === currentPokemon)) { alert('Already in team!'); return; }
+    
+    userTeam.push({
+        name: currentPokemon,
+        moves: [...selectedMoves]
+    });
+    
+    renderTeamSlots();
+    document.getElementById('teamCountDisplay').textContent = userTeam.length;
 }
 
-function clearTeam() { userTeam=[]; updateTeamDisplay(); document.getElementById('teamCount').textContent = 0; }
-function updateTeamDisplay() {
-    const d=document.getElementById('teamDisplay');
-    const s=document.getElementById('simTeamDisplay');
-    if (userTeam.length===0) { d.innerHTML='<p style="color:#9ab8e6;">No Pokémon yet</p>'; s.innerHTML='<p style="color:#9ab8e6;">No Pokémon yet</p>'; return; }
-    const html = userTeam.map(p=>`<div class="team-slot"><strong>${p.name}</strong><br><span>${p.moves.slice(0,2).join(', ')}</span></div>`).join('');
-    d.innerHTML = html;
-    s.innerHTML = html;
+function clearTeam() {
+    userTeam = [];
+    renderTeamSlots();
+    document.getElementById('teamCountDisplay').textContent = 0;
 }
 
-function runSimulation() {
-    if (userTeam.length < 4) { alert('Add at least 4 Pokémon'); return; }
-    document.getElementById('simResults').innerHTML = `<div style="text-align:center; padding:30px;"><div style="font-size:2rem;">🔄</div><p>Simulating ${selectedBattleCount} battles...</p></div>`;
-    setTimeout(() => {
-        const wins = Math.floor(Math.random() * selectedBattleCount * 0.6) + (selectedBattleCount * 0.2);
-        const rate = ((wins / selectedBattleCount) * 100).toFixed(1);
-        document.getElementById('simResults').innerHTML = `<div style="text-align:center;"><div style="font-size:4rem;">${rate>50?'💪':'⚠️'}</div><div style="font-size:3rem; font-weight:800; color:${rate>50?'#4eef7e':'#efb84e'};">${rate}%</div><p>${wins} / ${selectedBattleCount} wins</p></div>`;
-    }, 100);
+function renderTeamSlots() {
+    const container = document.getElementById('teamGrid');
+    let html = '';
+    for (let i = 0; i < 6; i++) {
+        if (i < userTeam.length) {
+            const poke = userTeam[i];
+            html += `<div class="team-slot filled">
+                <button class="remove-slot" onclick="removeFromTeam(${i})">×</button>
+                <img src="${getSpriteUrl(poke.name)}" onerror="this.src='https://img.pokemondb.net/sprites/sword-shield/normal/${poke.name.toLowerCase()}.png'" alt="${poke.name}">
+                <span class="slot-name">${poke.name}</span>
+            </div>`;
+        } else {
+            html += `<div class="team-slot"><span class="slot-empty">+</span></div>`;
+        }
+    }
+    container.innerHTML = html;
 }
 
-function switchTab() {
-    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-    document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-    this.classList.add('active');
-    document.getElementById(this.dataset.tab).classList.add('active');
-}
+window.removeFromTeam = function(index) {
+    userTeam.splice(index, 1);
+    renderTeamSlots();
+    document.getElementById('teamCountDisplay').textContent = userTeam.length;
+};
 
+// Start
 init();
 </script>
 </body>
