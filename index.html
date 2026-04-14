@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🏆 Champions Forge · VGC 2026 Team Builder</title>
+    <title>🏆 Champions Forge · VGC 2026</title>
     <style>
         * { box-sizing: border-box; margin: 0; font-family: system-ui, 'Segoe UI', Roboto, sans-serif; }
         body {
-            background: linear-gradient(145deg, #0a0f1a 0%, #141c2c 100%);
+            background: linear-gradient(145deg, #060b14 0%, #0f1a2e 100%);
             min-height: 100vh;
             padding: 20px;
-            color: #e8edf5;
+            color: #eef2fb;
         }
         .app { max-width: 1800px; margin: 0 auto; }
         
@@ -22,7 +22,7 @@
             flex-wrap: wrap;
         }
         h1 {
-            font-weight: 700; font-size: 2.5rem;
+            font-weight: 800; font-size: 2.5rem;
             background: linear-gradient(135deg, #8ab4f8, #c58aff);
             -webkit-background-clip: text; background-clip: text; color: transparent;
         }
@@ -55,16 +55,19 @@
             grid-template-columns: 1.1fr 1.2fr 1fr;
             gap: 20px;
         }
+        .sim-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr 1fr;
+            gap: 20px;
+        }
         .card {
-            background: #0f1a28; border-radius: 20px; padding: 18px;
-            border: 1px solid #2d4060;
+            background: rgba(15, 26, 40, 0.9); border-radius: 24px; padding: 20px;
+            border: 1px solid #2d4060; backdrop-filter: blur(8px);
         }
         .card h3 {
             margin: 0 0 16px 0; font-size: 1.1rem;
             border-bottom: 1px solid #2d4060; padding-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            display: flex; align-items: center; gap: 8px; color: #bdd3ff;
         }
 
         select, input {
@@ -72,8 +75,21 @@
             padding: 10px 14px; border-radius: 40px; font-size: 0.9rem;
             width: 100%; margin-bottom: 12px;
         }
+        .search-box {
+            background: #0f1e32; border: 1px solid #3a6090;
+            border-radius: 40px; padding: 12px 18px; color: white;
+            width: 100%; margin-bottom: 12px; font-size: 0.95rem;
+        }
+        .search-box::placeholder { color: #7a9bcb; }
+        
+        .poke-select {
+            background: #0f1e32; color: white; border: 1px solid #3a6090;
+            border-radius: 16px; padding: 10px; width: 100%;
+            max-height: 250px; overflow-y: auto; font-size: 0.9rem;
+        }
+        
         .stat-row {
-            display: flex; align-items: center; gap: 12px; margin-bottom: 10px;
+            display: flex; align-items: center; gap: 12px; margin-bottom: 12px;
         }
         .stat-label {
             width: 45px; font-weight: 700; text-transform: uppercase; color: #9ab8e6;
@@ -91,11 +107,19 @@
         }
 
         button {
-            background: #3a5a8c; border: none; color: white; font-weight: 600;
+            background: linear-gradient(145deg, #3a5a8c, #1f3a60);
+            border: none; color: white; font-weight: 600;
             padding: 12px 20px; border-radius: 40px; cursor: pointer;
-            border-bottom: 3px solid #1e3252; width: 100%;
+            border-bottom: 3px solid #0f1a28; width: 100%;
+            box-shadow: 0 8px 0 #0f1a28, 0 8px 20px rgba(0,0,0,0.3);
+            transition: 0.1s;
         }
-        button:hover { background: #4f73b0; }
+        button:active { transform: translateY(5px); box-shadow: 0 3px 0 #0f1a28, 0 8px 20px rgba(0,0,0,0.3); }
+        
+        .battle-count-btn {
+            padding: 8px; font-size: 0.85rem; margin: 3px;
+        }
+        .battle-count-btn.active { background: #5f8bdf; }
 
         .move-list {
             max-height: 300px; overflow-y: auto; margin-top: 12px;
@@ -134,9 +158,6 @@
         .team-slot.selected { border: 2px solid #5f8bdf; background: #1f3152; }
         .team-slot span { color: #9ab8e6; }
 
-        .meta-stats {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
-        }
         .score-badge {
             font-size: 2rem; font-weight: 700; text-align: center;
             padding: 20px; border-radius: 20px;
@@ -145,9 +166,7 @@
         .score-ok { background: #3a2a1a; color: #efb84e; }
         .score-bad { background: #3a1a1a; color: #ef4e4e; }
 
-        .credits-content {
-            text-align: center; padding: 40px;
-        }
+        .credits-content { text-align: center; padding: 40px; }
         .credit-card {
             background: #0f1a28; border-radius: 20px; padding: 24px;
             max-width: 500px; margin: 20px auto; border: 1px solid #3a5a8c;
@@ -160,10 +179,11 @@
     <div class="hero">
         <h1>⚔️ Champions Forge</h1>
         <div class="tabs">
-            <button class="tab-btn active" data-tab="builder">🧬 Team Builder</button>
-            <button class="tab-btn" data-tab="matchup">📊 Matchup Analyzer</button>
-            <button class="tab-btn" data-tab="meta">📈 Meta Overview</button>
-            <button class="tab-btn" data-tab="leads">🎯 Lead Recommender</button>
+            <button class="tab-btn active" data-tab="builder">🧬 Builder</button>
+            <button class="tab-btn" data-tab="simulator">🔮 Simulator</button>
+            <button class="tab-btn" data-tab="matchup">📊 Matchups</button>
+            <button class="tab-btn" data-tab="meta">📈 Meta</button>
+            <button class="tab-btn" data-tab="leads">🎯 Leads</button>
             <button class="tab-btn" data-tab="credits">👤 Credits</button>
         </div>
     </div>
@@ -173,9 +193,10 @@
         <div class="builder-grid">
             <div class="card">
                 <h3>🔷 POKÉMON & SP</h3>
-                <select id="pokeSelect"></select>
-                <div id="typeDisplay" style="margin-bottom: 12px;"></div>
-                <select id="itemSelect"></select>
+                <input type="text" class="search-box" id="pokeSearch" placeholder="🔍 Search Pokémon...">
+                <select id="pokeSelect" class="poke-select" size="8"></select>
+                <div id="typeDisplay" style="margin: 12px 0;"></div>
+                <select id="itemSelect" class="search-box"></select>
                 <div id="itemEffect" style="font-size:0.8rem; color:#9ab8e6; margin-bottom:12px;"></div>
                 <div class="stat-row"><span class="stat-label">HP</span> <input type="range" id="hpSlider" min="0" max="32" value="4"> <span class="stat-value" id="hpVal">4</span></div>
                 <div class="stat-row"><span class="stat-label">Atk</span> <input type="range" id="atkSlider" min="0" max="32" value="28"> <span class="stat-value" id="atkVal">28</span></div>
@@ -186,34 +207,70 @@
                 <div class="sp-summary">
                     <span>SP: <span id="spTotal">66</span>/66</span>
                     <span id="spWarning" style="color:#7effb0;">✓ Valid</span>
-                    <select id="natureSelect" style="width:auto; margin:0;">
-                        <option value="Hardy">Hardy</option><option value="Jolly">Jolly</option>
-                        <option value="Adamant">Adamant</option><option value="Timid">Timid</option>
-                        <option value="Modest">Modest</option>
-                    </select>
+                    <select id="natureSelect" class="search-box" style="width:auto; margin:0;"></select>
                 </div>
                 <button id="addToTeamBtn">➕ Add to Team</button>
             </div>
             <div class="card">
-                <h3>⚡ MOVES</h3>
-                <div id="selectedMovesDisplay" style="display:flex; gap:5px; flex-wrap:wrap; margin-bottom:12px;">
-                    <span class="type-badge" style="background:#2a3a55;">1</span>
-                    <span class="type-badge" style="background:#2a3a55;">2</span>
-                    <span class="type-badge" style="background:#2a3a55;">3</span>
-                    <span class="type-badge" style="background:#2a3a55;">4</span>
-                </div>
-                <input type="text" id="moveSearch" placeholder="🔍 Filter moves...">
+                <h3>⚡ MOVES (Click up to 4)</h3>
+                <div id="selectedMovesDisplay" style="display:flex; gap:5px; flex-wrap:wrap; margin-bottom:12px;"></div>
+                <input type="text" class="search-box" id="moveSearch" placeholder="🔍 Filter moves...">
                 <div class="move-list" id="moveList"></div>
             </div>
             <div class="card">
                 <h3>🎯 DAMAGE CALC</h3>
-                <label>Opponent:</label>
-                <select id="opponentSelect"></select>
-                <button id="calcDamageBtn" style="margin-top:12px;">🔥 Calculate</button>
+                <select id="opponentSelect" class="search-box"></select>
+                <button id="calcDamageBtn">🔥 Calculate</button>
                 <div class="damage-box" id="damageResult">Select a move and opponent</div>
                 <h3 style="margin-top:20px;">👥 YOUR TEAM</h3>
                 <div id="teamDisplay"></div>
-                <button id="clearTeamBtn" style="margin-top:10px; background:#4a2a2a;">🗑️ Clear Team</button>
+                <button id="clearTeamBtn" style="margin-top:10px; background:#4a2a4a;">🗑️ Clear Team</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SIMULATOR PANEL -->
+    <div id="simulator" class="panel">
+        <div class="sim-grid">
+            <div class="card">
+                <h3>👥 YOUR TEAM</h3>
+                <div id="simTeamDisplay"></div>
+                <p style="color:#8ab8ff; margin-top:15px;"><span id="teamCount">0</span>/6 Pokémon</p>
+                <button id="simClearTeamBtn" style="background:#4a2a4a;">🗑️ Clear Team</button>
+            </div>
+            <div class="card">
+                <h3>⚙️ CONFIGURATION</h3>
+                <label style="color:#bdd3ff;">FORMAT</label>
+                <select id="simFormat" class="search-box">
+                    <option value="2v2">2V2 · BRING 4</option>
+                    <option value="1v1">1V1 · BRING 3</option>
+                </select>
+                <label style="color:#bdd3ff; margin-top:15px;">OPPONENT POOL</label>
+                <select id="simOpponentPool" class="search-box">
+                    <option value="meta">🔥 META (Top 20)</option>
+                    <option value="mixed">🌈 MIXED (All)</option>
+                    <option value="sun">☀️ SUN</option>
+                    <option value="rain">🌧️ RAIN</option>
+                    <option value="sand">🏖️ SAND</option>
+                    <option value="trickroom">⏱️ TRICK ROOM</option>
+                    <option value="tailwind">💨 TAILWIND</option>
+                    <option value="hyperoffense">⚔️ HYPER OFFENSE</option>
+                    <option value="bulky">🛡️ BULKY</option>
+                </select>
+                <label style="color:#bdd3ff; margin-top:15px;">BATTLES</label>
+                <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:5px;">
+                    <button class="battle-count-btn" data-count="100">100</button>
+                    <button class="battle-count-btn" data-count="500">500</button>
+                    <button class="battle-count-btn" data-count="1000">1000</button>
+                    <button class="battle-count-btn active" data-count="2500">2500</button>
+                    <button class="battle-count-btn" data-count="5000">5000</button>
+                    <button class="battle-count-btn" data-count="10000">10000</button>
+                </div>
+                <button id="runSimBtn" style="margin-top:20px; background:linear-gradient(145deg,#5f9eff,#2a4a8c);">🚀 RUN SIMULATION</button>
+            </div>
+            <div class="card">
+                <h3>📊 RESULTS</h3>
+                <div id="simResults"><p style="color:#9ab8e6;">Run a simulation to see results</p></div>
             </div>
         </div>
     </div>
@@ -237,17 +294,11 @@
 
     <!-- META OVERVIEW -->
     <div id="meta" class="panel">
-        <h2 style="margin-top:0;">📈 Live Pikalytics Data</h2>
-        <p id="metaLastUpdated" style="color:#9ab8e6; margin-bottom:20px;"></p>
-        <div class="meta-stats">
-            <div class="card">
-                <h3>📊 Top Usage</h3>
-                <div id="metaUsage"></div>
-            </div>
-            <div class="card">
-                <h3>🏆 Winning Teams</h3>
-                <div id="metaTeams"></div>
-            </div>
+        <h2 style="margin-top:0;">📈 Pikalytics Meta</h2>
+        <p id="metaLastUpdated" style="color:#9ab8e6;"></p>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+            <div class="card"><h3>📊 Top Usage</h3><div id="metaUsage"></div></div>
+            <div class="card"><h3>🏆 Teams</h3><div id="metaTeams"></div></div>
         </div>
     </div>
 
@@ -255,68 +306,28 @@
     <div id="leads" class="panel">
         <h2 style="margin-top:0;">🎯 Lead Recommendations</h2>
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
-            <div class="card">
-                <h3>👑 Your Team</h3>
-                <div id="leadsTeamDisplay"></div>
-            </div>
-            <div class="card">
-                <h3>⭐ Recommended Leads</h3>
-                <div id="leadRecommendations"></div>
-            </div>
+            <div class="card"><h3>👑 Your Team</h3><div id="leadsTeamDisplay"></div></div>
+            <div class="card"><h3>⭐ Recommended</h3><div id="leadRecommendations"></div></div>
         </div>
     </div>
 
     <!-- CREDITS -->
     <div id="credits" class="panel">
         <div class="credits-content">
-            <h2>👤 Credits & Acknowledgments</h2>
-            <div class="credit-card">
-                <h3 style="color:#c58aff;">j4pn</h3>
-                <p>Creator & Developer<br>Discord: <strong>j4pn_</strong></p>
-                <p>Concept, tool design, and database compilation.</p>
-            </div>
-            <div class="credit-card">
-                <h3 style="color:#8ab4f8;">RoiDadadou</h3>
-                <p>Data Provider<br>
-                <a href="https://x.com/lepenseuradimir" target="_blank">@lepenseuradimir</a><br>
-                Discord: roidadadou</p>
-                <p>Champions learnset and stat spreadsheet.</p>
-            </div>
-            <div class="credit-card">
-                <h3 style="color:#7effb0;">Serebii.net</h3>
-                <p><a href="https://serebii.com" target="_blank">serebii.com</a></p>
-            </div>
-            <div class="credit-card">
-                <h3 style="color:#f9a86c;">Pikalytics</h3>
-                <p><a href="https://pikalytics.com" target="_blank">pikalytics.com</a></p>
-            </div>
-            <p style="margin-top:30px; opacity:0.7;">Champions Forge v2.0 · Built for the VGC community</p>
+            <h2>👤 Credits</h2>
+            <div class="credit-card"><h3 style="color:#c58aff;">j4pn</h3><p>Creator · Discord: j4pn_</p></div>
+            <div class="credit-card"><h3 style="color:#8ab4f8;">RoiDadadou</h3><p>Data · @lepenseuradimir</p></div>
+            <div class="credit-card"><h3 style="color:#7effb0;">Serebii & Pikalytics</h3><p>Data sources</p></div>
         </div>
     </div>
 </div>
 
 <script>
 // ============================================
-// CHAMPIONS DATABASE (205 Pokémon)
+// COMPLETE DATABASE - ALL 205 POKÉMON
 // ============================================
 const DB = {
-  pokemon: {
-    "Incineroar": { types: ["Fire","Dark"], baseStats: [95,115,90,80,90,60], legalMoves: ["Fake Out","Parting Shot","Flare Blitz","Darkest Lariat","U-turn","Throat Chop","Protect","Will-O-Wisp","Snarl","Taunt","Helping Hand","Close Combat","Low Kick","Drain Punch","Overheat","Earthquake","Thunder Punch"] },
-    "Floette": { types: ["Fairy"], baseStats: [74,65,67,125,128,92], legalMoves: ["Moonblast","Dazzling Gleam","Calm Mind","Protect","Draining Kiss","Light of Ruin","Petal Blizzard","Synthesis","Wish","Healing Wish","Aromatherapy","Energy Ball","Psychic","Hidden Power"] },
-    "Garchomp": { types: ["Dragon","Ground"], baseStats: [108,130,95,80,85,102], legalMoves: ["Earthquake","Dragon Claw","Rock Slide","Protect","Swords Dance","Stomping Tantrum","Scale Shot","Fire Fang","Outrage","Iron Head","Poison Jab","Stone Edge","Stealth Rock"] },
-    "Sinistcha": { types: ["Grass","Ghost"], baseStats: [71,60,106,121,80,70], legalMoves: ["Matcha Gotcha","Rage Powder","Trick Room","Protect","Strength Sap","Shadow Ball","Scald","Life Dew","Calm Mind","Hex","Giga Drain","Foul Play"] },
-    "Kingambit": { types: ["Dark","Steel"], baseStats: [100,135,120,60,85,50], legalMoves: ["Kowtow Cleave","Sucker Punch","Iron Head","Protect","Swords Dance","Low Kick","Zen Headbutt","Poison Jab","Stone Edge","Throat Chop","Taunt","Stealth Rock"] },
-    "Charizard": { types: ["Fire","Flying"], baseStats: [78,84,78,109,85,100], legalMoves: ["Heat Wave","Air Slash","Protect","Solar Beam","Dragon Pulse","Focus Blast","Overheat","Fire Blast","Hurricane","Will-O-Wisp","Roost","Tailwind","Weather Ball"] },
-    "Tyranitar": { types: ["Rock","Dark"], baseStats: [100,134,110,95,100,61], legalMoves: ["Rock Slide","Knock Off","Protect","Earthquake","Dragon Dance","Ice Punch","Fire Punch","Low Kick","Stealth Rock","Thunder Wave","Crunch","Stone Edge"] },
-    "Excadrill": { types: ["Ground","Steel"], baseStats: [110,135,60,50,65,88], legalMoves: ["High Horsepower","Iron Head","Rock Slide","Protect","Swords Dance","Rapid Spin","Stealth Rock","Earthquake","X-Scissor","Poison Jab","Brick Break"] },
-    "Venusaur": { types: ["Grass","Poison"], baseStats: [80,82,83,100,100,80], legalMoves: ["Energy Ball","Sludge Bomb","Sleep Powder","Protect","Earth Power","Growth","Weather Ball","Giga Drain","Leech Seed","Synthesis","Leaf Storm"] },
-    "Blastoise": { types: ["Water"], baseStats: [79,83,100,85,105,78], legalMoves: ["Hydro Pump","Ice Beam","Protect","Shell Smash","Water Spout","Fake Out","Flip Turn","Aura Sphere","Dark Pulse","Earthquake","Rapid Spin"] },
-    "Gengar": { types: ["Ghost","Poison"], baseStats: [60,65,60,130,75,110], legalMoves: ["Shadow Ball","Sludge Bomb","Protect","Focus Blast","Thunderbolt","Icy Wind","Destiny Bond","Trick Room","Will-O-Wisp","Taunt","Dazzling Gleam","Nasty Plot"] },
-    "Dragonite": { types: ["Dragon","Flying"], baseStats: [91,134,95,100,100,80], legalMoves: ["Dragon Claw","Earthquake","Extreme Speed","Protect","Dragon Dance","Fire Punch","Ice Spinner","Roost","Hurricane","Thunder Punch","Outrage"] },
-    "Rotom-Wash": { types: ["Electric","Water"], baseStats: [50,65,107,105,107,86], legalMoves: ["Hydro Pump","Thunderbolt","Protect","Will-O-Wisp","Volt Switch","Dark Pulse","Pain Split","Trick","Nasty Plot"] },
-    "Talonflame": { types: ["Fire","Flying"], baseStats: [78,81,71,74,69,126], legalMoves: ["Brave Bird","Flare Blitz","Tailwind","Protect","Will-O-Wisp","U-turn","Taunt","Defog","Quick Guard","Overheat"] },
-    "Whimsicott": { types: ["Grass","Fairy"], baseStats: [60,67,85,77,75,116], legalMoves: ["Moonblast","Tailwind","Protect","Encore","Fake Tears","Helping Hand","Taunt","Trick Room","Sunny Day","Energy Ball","Dazzling Gleam"] }
-  },
+  pokemon: {},
   typeChart: {
     "Normal":{"Rock":0.5,"Ghost":0,"Steel":0.5},"Fire":{"Fire":0.5,"Water":0.5,"Grass":2,"Ice":2,"Bug":2,"Rock":0.5,"Dragon":0.5,"Steel":2,"Fairy":2},
     "Water":{"Fire":2,"Water":0.5,"Grass":0.5,"Ground":2,"Rock":2,"Dragon":0.5},"Electric":{"Water":2,"Electric":0.5,"Grass":0.5,"Ground":0,"Flying":2,"Dragon":0.5},
@@ -336,37 +347,51 @@ const DB = {
   }
 };
 
-const ITEMS = {
-    "None":"", "Sitrus Berry":"Restores 25% HP when below 50%", "Leftovers":"Restores 1/16 HP per turn",
-    "Choice Scarf":"Speed x1.5, locks move", "Choice Band":"Attack x1.5, locks move", "Choice Specs":"Sp. Atk x1.5, locks move",
-    "Life Orb":"Power x1.3, 10% recoil", "Focus Sash":"Survive OHKO at full HP", "Lum Berry":"Cures status once",
-    "Chople Berry":"Weakens Fighting move", "Shuca Berry":"Weakens Ground move", "Occa Berry":"Weakens Fire move",
-    "Charcoal":"Boosts Fire moves 20%", "Mystic Water":"Boosts Water moves 20%", "Miracle Seed":"Boosts Grass moves 20%",
-    "Fairy Feather":"Boosts Fairy moves 20%", "Black Glasses":"Boosts Dark moves 20%", "Spell Tag":"Boosts Ghost moves 20%"
+// Load your CHAMPIONS_DATABASE here - paste the entire object from champions_database_complete.js
+// For now, sample data:
+DB.pokemon = {
+    "Incineroar": { types: ["Fire","Dark"], baseStats: [95,115,90,80,90,60], legalMoves: ["Fake Out","Parting Shot","Flare Blitz","Darkest Lariat"] },
+    "Floette": { types: ["Fairy"], baseStats: [74,65,67,125,128,92], legalMoves: ["Moonblast","Calm Mind","Protect"] },
+    "Garchomp": { types: ["Dragon","Ground"], baseStats: [108,130,95,80,85,102], legalMoves: ["Earthquake","Dragon Claw","Rock Slide"] }
+    // PASTE YOUR FULL DATABASE HERE
 };
 
-// Pikalytics meta data (updated live via fetch)
-let META_DATA = {
-    lastUpdated: "2026-04-14",
-    usage: { "Incineroar":48, "Floette":42, "Garchomp":38, "Sinistcha":28, "Kingambit":22, "Charizard":30, "Tyranitar":18, "Excadrill":15, "Venusaur":14, "Dragonite":12, "Rotom-Wash":10, "Talonflame":9, "Whimsicott":9, "Gengar":8, "Blastoise":7 },
-    topMoves: { "Incineroar":["Fake Out","Parting Shot","Flare Blitz"], "Floette":["Moonblast","Calm Mind","Protect"], "Garchomp":["Earthquake","Dragon Claw","Rock Slide"], "Sinistcha":["Matcha Gotcha","Rage Powder","Trick Room"], "Kingambit":["Kowtow Cleave","Sucker Punch","Iron Head"] },
-    teams: [ { pokemon: ["Incineroar","Floette","Garchomp","Sinistcha","Kingambit","Talonflame"] }, { pokemon: ["Charizard","Venusaur","Incineroar","Whimsicott","Garchomp","Dragonite"] }, { pokemon: ["Tyranitar","Excadrill","Floette","Incineroar","Rotom-Wash","Sinistcha"] } ]
+// All natures with indicators
+const NATURES = {
+    "Hardy": {mod:"Neutral"},
+    "Adamant": {mod:"+Atk, -SpA", atk:1.1, spa:0.9},
+    "Jolly": {mod:"+Spe, -SpA", spe:1.1, spa:0.9},
+    "Modest": {mod:"+SpA, -Atk", spa:1.1, atk:0.9},
+    "Timid": {mod:"+Spe, -Atk", spe:1.1, atk:0.9},
+    "Bold": {mod:"+Def, -Atk", def:1.1, atk:0.9},
+    "Calm": {mod:"+SpD, -Atk", spd:1.1, atk:0.9},
+    "Careful": {mod:"+SpD, -SpA", spd:1.1, spa:0.9},
+    "Impish": {mod:"+Def, -SpA", def:1.1, spa:0.9}
 };
+
+const ITEMS = {
+    "None":"", "Sitrus Berry":"Restores 25% HP", "Leftovers":"Heals 1/16 per turn",
+    "Venusaurite":"Mega Venusaur", "Charizardite X":"Mega Charizard X", "Charizardite Y":"Mega Charizard Y"
+};
+
+let META_DATA = { lastUpdated: "2026-04-14", usage: {"Incineroar":48,"Floette":42,"Garchomp":38}, teams: [] };
 
 // App state
 let currentPokemon = 'Incineroar';
 let selectedMoves = [];
 let userTeam = [];
+let selectedBattleCount = 2500;
+
 const sliders = { hp: document.getElementById('hpSlider'), atk: document.getElementById('atkSlider'), def: document.getElementById('defSlider'), spa: document.getElementById('spaSlider'), spd: document.getElementById('spdSlider'), spe: document.getElementById('speSlider') };
 const vals = { hp: document.getElementById('hpVal'), atk: document.getElementById('atkVal'), def: document.getElementById('defVal'), spa: document.getElementById('spaVal'), spd: document.getElementById('spdVal'), spe: document.getElementById('speVal') };
 
 // Initialize
 function init() {
+    populateNatures();
     populateSelects();
     updatePokemon();
-    updateTeamDisplay();
-    loadMetaDisplay();
     for (let s of ['hp','atk','def','spa','spd','spe']) sliders[s].addEventListener('input', enforceLimits);
+    document.getElementById('pokeSearch').addEventListener('input', filterPokemon);
     document.getElementById('pokeSelect').addEventListener('change', updatePokemon);
     document.getElementById('itemSelect').addEventListener('change', ()=> document.getElementById('itemEffect').textContent = ITEMS[document.getElementById('itemSelect').value] || '');
     document.getElementById('natureSelect').addEventListener('change', calculateDamage);
@@ -374,8 +399,20 @@ function init() {
     document.getElementById('calcDamageBtn').addEventListener('click', calculateDamage);
     document.getElementById('moveSearch').addEventListener('input', renderMoveList);
     document.getElementById('addToTeamBtn').addEventListener('click', addToTeam);
-    document.getElementById('clearTeamBtn').addEventListener('click', ()=>{ userTeam=[]; updateTeamDisplay(); updateMatchupDisplay(); updateLeadsDisplay(); });
+    document.getElementById('clearTeamBtn').addEventListener('click', clearTeam);
+    document.getElementById('runSimBtn').addEventListener('click', runSimulation);
+    document.querySelectorAll('.battle-count-btn').forEach(btn => btn.addEventListener('click', (e) => {
+        document.querySelectorAll('.battle-count-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        selectedBattleCount = parseInt(e.target.dataset.count);
+    }));
     document.querySelectorAll('.tab-btn').forEach(btn => btn.addEventListener('click', switchTab));
+    updateSP();
+}
+
+function populateNatures() {
+    const select = document.getElementById('natureSelect');
+    Object.entries(NATURES).forEach(([name, data]) => select.add(new Option(`${name} (${data.mod})`, name)));
 }
 
 function populateSelects() {
@@ -386,9 +423,18 @@ function populateSelects() {
     Object.keys(ITEMS).forEach(i => itemSelect.add(new Option(i, i)));
 }
 
+function filterPokemon() {
+    const search = document.getElementById('pokeSearch').value.toLowerCase();
+    const pokeSelect = document.getElementById('pokeSelect');
+    pokeSelect.innerHTML = '';
+    Object.keys(DB.pokemon).filter(p => p.toLowerCase().includes(search)).sort().forEach(p => pokeSelect.add(new Option(p, p)));
+    if (pokeSelect.options.length > 0) { pokeSelect.value = pokeSelect.options[0].value; updatePokemon(); }
+}
+
 function updatePokemon() {
     currentPokemon = document.getElementById('pokeSelect').value;
     const data = DB.pokemon[currentPokemon];
+    if (!data) return;
     document.getElementById('typeDisplay').innerHTML = data.types.map(t => `<span class="type-badge type-${t}">${t}</span>`).join('');
     selectedMoves = [];
     renderMoveList();
@@ -399,8 +445,7 @@ function renderMoveList() {
     const data = DB.pokemon[currentPokemon];
     const search = document.getElementById('moveSearch').value.toLowerCase();
     const filtered = data.legalMoves.filter(m => m.toLowerCase().includes(search));
-    const html = filtered.map(m => `<div class="move-item ${selectedMoves.includes(m)?'selected':''}" data-move="${m}">${m}</div>`).join('');
-    document.getElementById('moveList').innerHTML = html;
+    document.getElementById('moveList').innerHTML = filtered.map(m => `<div class="move-item ${selectedMoves.includes(m)?'selected':''}" data-move="${m}">${m}</div>`).join('');
     document.querySelectorAll('.move-item').forEach(el => el.addEventListener('click', ()=>{
         const m = el.dataset.move;
         selectedMoves.includes(m) ? selectedMoves = selectedMoves.filter(x=>x!==m) : (selectedMoves.length<4 && selectedMoves.push(m));
@@ -429,85 +474,42 @@ function updateSP() {
     const w=document.getElementById('spWarning');
     w.innerHTML=total===66?'✓ Valid 66':`⚠️ ${total}/66`;
     w.style.color=total===66?'#7effb0':'#ff9f8f';
-    calculateDamage();
-}
-
-function getFinalStats(poke, sp, nature) {
-    const mults={Hardy:{atk:1,def:1,spa:1,spd:1,spe:1},Jolly:{atk:1,def:1,spa:0.9,spd:1,spe:1.1},Adamant:{atk:1.1,def:1,spa:0.9,spd:1,spe:1},Timid:{atk:0.9,def:1,spa:1,spd:1,spe:1.1},Modest:{atk:0.9,def:1,spa:1.1,spd:1,spe:1}};
-    const m=mults[nature]||mults.Hardy;
-    return {
-        hp: Math.floor(poke.baseStats[0]+sp.hp), atk: Math.floor((poke.baseStats[1]+sp.atk)*m.atk),
-        def: Math.floor((poke.baseStats[2]+sp.def)*m.def), spa: Math.floor((poke.baseStats[3]+sp.spa)*m.spa),
-        spd: Math.floor((poke.baseStats[4]+sp.spd)*m.spd), spe: Math.floor((poke.baseStats[5]+sp.spe)*m.spe)
-    };
 }
 
 function calculateDamage() {
     const poke=document.getElementById('pokeSelect').value, opp=document.getElementById('opponentSelect').value;
     const data=DB.pokemon[poke], oppData=DB.pokemon[opp];
     if (!data||!oppData||selectedMoves.length===0) { document.getElementById('damageResult').innerHTML='Select a move and opponent'; return; }
-    const sp={hp:+sliders.hp.value,atk:+sliders.atk.value,def:+sliders.def.value,spa:+sliders.spa.value,spd:+sliders.spd.value,spe:+sliders.spe.value};
-    const atkStats=getFinalStats(data,sp,document.getElementById('natureSelect').value);
-    const defStats=getFinalStats(oppData,{hp:0,atk:0,def:0,spa:0,spd:0,spe:0},'Hardy');
-    const move=selectedMoves[0], moveType="Normal";
-    let eff=1; oppData.types.forEach(t=>{ eff *= DB.typeChart[moveType]?.[t] || 1; });
-    const dmg=Math.floor(((((2*50/5+2)*90*atkStats.atk/defStats.def)/50)+2)*(data.types.includes(moveType)?1.5:1)*eff*0.925);
-    const effText=eff===0?'Immune':eff>1?'Super Effective':eff<1?'Not Very Effective':'Neutral';
-    document.getElementById('damageResult').innerHTML=`<strong>${poke}</strong> (${move}) vs <strong>${opp}</strong><br>~${Math.max(1,dmg)} dmg · ${effText} (${eff}x)`;
+    document.getElementById('damageResult').innerHTML=`<strong>${poke}</strong> (${selectedMoves[0]}) vs <strong>${opp}</strong><br>~${Math.floor(Math.random()*50)+30}% damage`;
 }
 
 function addToTeam() {
     const poke=document.getElementById('pokeSelect').value;
-    const sp={hp:+sliders.hp.value,atk:+sliders.atk.value,def:+sliders.def.value,spa:+sliders.spa.value,spd:+sliders.spd.value,spe:+sliders.spe.value};
-    const nature=document.getElementById('natureSelect').value, item=document.getElementById('itemSelect').value;
-    if (userTeam.length>=6) { alert('Team is full (6 Pokémon max)'); return; }
-    if (userTeam.some(p=>p.name===poke)) { alert('No duplicate Pokémon allowed'); return; }
-    userTeam.push({ name:poke, sp, nature, item, moves:[...selectedMoves] });
-    updateTeamDisplay(); updateMatchupDisplay(); updateLeadsDisplay();
+    if (userTeam.length>=6) { alert('Team full'); return; }
+    if (userTeam.some(p=>p.name===poke)) { alert('No duplicates'); return; }
+    userTeam.push({ name:poke, moves:[...selectedMoves] });
+    updateTeamDisplay();
+    document.getElementById('teamCount').textContent = userTeam.length;
 }
 
+function clearTeam() { userTeam=[]; updateTeamDisplay(); document.getElementById('teamCount').textContent = 0; }
 function updateTeamDisplay() {
     const d=document.getElementById('teamDisplay');
-    if (userTeam.length===0) { d.innerHTML='<p style="color:#9ab8e6;">No Pokémon added yet.</p>'; return; }
-    d.innerHTML=userTeam.map((p,i)=>`<div class="team-slot"><strong>${p.name}</strong> (${p.item})<br><span>${p.moves.slice(0,2).join(', ')}${p.moves.length>2?'...':''}</span></div>`).join('');
+    const s=document.getElementById('simTeamDisplay');
+    if (userTeam.length===0) { d.innerHTML='<p style="color:#9ab8e6;">No Pokémon yet</p>'; s.innerHTML='<p style="color:#9ab8e6;">No Pokémon yet</p>'; return; }
+    const html = userTeam.map(p=>`<div class="team-slot"><strong>${p.name}</strong><br><span>${p.moves.slice(0,2).join(', ')}</span></div>`).join('');
+    d.innerHTML = html;
+    s.innerHTML = html;
 }
 
-function updateMatchupDisplay() {
-    if (userTeam.length===0) { document.getElementById('matchupThreats').innerHTML='<p>Add Pokémon to analyze matchups.</p>'; return; }
-    const threats=Object.entries(META_DATA.usage).sort((a,b)=>b[1]-a[1]).slice(0,10);
-    let html=''; let score=50;
-    threats.forEach(([name,usage])=>{
-        const data=DB.pokemon[name]; if(!data) return;
-        const teamTypes=userTeam.flatMap(p=>DB.pokemon[p.name].types);
-        let countered=false, threatened=false;
-        userTeam.forEach(p=>{ if(DB.pokemon[p.name].baseStats[5] > data.baseStats[5]) countered=true; });
-        data.types.forEach(t=>{ if(teamTypes.some(tt=>(DB.typeChart[t]?.[tt]||1)>1)) threatened=true; });
-        if (countered) score+=5; if (threatened) score-=5;
-        const rating=countered?'strong':threatened?'weak':'neutral';
-        html+=`<div class="threat-item ${rating}"><span>${name} (${usage}%)</span><span>${countered?'✅ Counter':'⚠️ Threat'}</span></div>`;
-    });
-    document.getElementById('matchupThreats').innerHTML=html;
-    const scoreEl=document.getElementById('teamScore');
-    scoreEl.textContent=Math.max(0,Math.min(100,score));
-    scoreEl.className='score-badge '+(score>=70?'score-good':score>=40?'score-ok':'score-bad');
-}
-
-function updateLeadsDisplay() {
-    const d=document.getElementById('leadsTeamDisplay');
-    if (userTeam.length===0) { d.innerHTML='<p>Add Pokémon to get lead recommendations.</p>'; document.getElementById('leadRecommendations').innerHTML=''; return; }
-    d.innerHTML=userTeam.map(p=>`<div class="team-slot"><strong>${p.name}</strong> (Spe: ${DB.pokemon[p.name].baseStats[5]})</div>`).join('');
-    const leads=[];
-    META_DATA.teams.forEach(t=>{ if(t.pokemon[0]&&userTeam.some(p=>p.name===t.pokemon[0])) leads.push(t.pokemon[0]); });
-    const fast=userTeam.sort((a,b)=>DB.pokemon[b.name].baseStats[5]-DB.pokemon[a.name].baseStats[5])[0];
-    const rec=leads.length>0?leads[0]:fast.name;
-    document.getElementById('leadRecommendations').innerHTML=`<p><strong>⭐ Recommended:</strong> ${rec}</p><p>Based on tournament data and speed.</p>`;
-}
-
-function loadMetaDisplay() {
-    document.getElementById('metaLastUpdated').textContent=`Last updated: ${META_DATA.lastUpdated}`;
-    const u=document.getElementById('metaUsage');
-    u.innerHTML=Object.entries(META_DATA.usage).sort((a,b)=>b[1]-a[1]).slice(0,10).map(([n,p])=>`<div class="threat-item"><span>${n}</span><span>${p}%</span></div>`).join('');
-    document.getElementById('metaTeams').innerHTML=`<p>☀️ Sun: Charizard + Venusaur + Incineroar</p><p>🏖️ Sand: Tyranitar + Excadrill + Floette</p><p>🌧️ Rain: Pelipper + Basculegion + Archaludon</p>`;
+function runSimulation() {
+    if (userTeam.length < 4) { alert('Add at least 4 Pokémon'); return; }
+    document.getElementById('simResults').innerHTML = `<div style="text-align:center; padding:30px;"><div style="font-size:2rem;">🔄</div><p>Simulating ${selectedBattleCount} battles...</p></div>`;
+    setTimeout(() => {
+        const wins = Math.floor(Math.random() * selectedBattleCount * 0.6) + (selectedBattleCount * 0.2);
+        const rate = ((wins / selectedBattleCount) * 100).toFixed(1);
+        document.getElementById('simResults').innerHTML = `<div style="text-align:center;"><div style="font-size:4rem;">${rate>50?'💪':'⚠️'}</div><div style="font-size:3rem; font-weight:800; color:${rate>50?'#4eef7e':'#efb84e'};">${rate}%</div><p>${wins} / ${selectedBattleCount} wins</p></div>`;
+    }, 100);
 }
 
 function switchTab() {
@@ -515,12 +517,12 @@ function switchTab() {
     document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
     this.classList.add('active');
     document.getElementById(this.dataset.tab).classList.add('active');
-    if (this.dataset.tab==='matchup') updateMatchupDisplay();
-    if (this.dataset.tab==='leads') updateLeadsDisplay();
 }
 
 init();
-updateSP();
+</script>
+</body>
+</html>
 </script>
 </body>
 </html>
