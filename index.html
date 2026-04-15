@@ -145,6 +145,50 @@
                 <label style="color:#b0d8f0; font-size:0.85rem;">Opponent</label>
                 <select id="opponentSelect" class="nature-select"></select>
                 <button class="calculate-btn" id="calcDamageBtn">🔥 Calculate Damage</button>
+                <div style="margin-top:12px; padding-top:12px; border-top:1px solid #2a4a7a;">
+    <details>
+        <summary style="color:#b8dff8; cursor:pointer;">⚙️ Advanced Options</summary>
+        <div style="margin-top:12px;">
+            <label style="color:#9ac0e0; font-size:0.8rem;">Weather</label>
+            <select id="weatherSelect" class="nature-select" style="margin-bottom:8px;">
+                <option value="none">None</option>
+                <option value="sun">☀️ Sun</option>
+                <option value="rain">🌧️ Rain</option>
+                <option value="sand">🏖️ Sand</option>
+                <option value="snow">❄️ Snow</option>
+            </select>
+            
+            <label style="color:#9ac0e0; font-size:0.8rem;">Terrain</label>
+            <select id="terrainSelect" class="nature-select" style="margin-bottom:8px;">
+                <option value="none">None</option>
+                <option value="electric">⚡ Electric</option>
+                <option value="grassy">🌿 Grassy</option>
+                <option value="psychic">🔮 Psychic</option>
+                <option value="misty">🌸 Misty</option>
+            </select>
+            
+            <label style="color:#9ac0e0; font-size:0.8rem;">Attacker Status</label>
+            <select id="attackerStatusSelect" class="nature-select" style="margin-bottom:8px;">
+                <option value="none">None</option>
+                <option value="burn">🔥 Burned</option>
+                <option value="poison">☠️ Poisoned</option>
+            </select>
+            
+            <label style="color:#9ac0e0; font-size:0.8rem;">Critical Hit</label>
+            <select id="criticalSelect" class="nature-select" style="margin-bottom:8px;">
+                <option value="false">No</option>
+                <option value="true">Yes (1.5x)</option>
+            </select>
+            
+            <label style="color:#9ac0e0; font-size:0.8rem;">Screens</label>
+            <div style="display:flex; gap:10px; margin-bottom:8px;">
+                <label><input type="checkbox" id="reflectScreen"> Reflect</label>
+                <label><input type="checkbox" id="lightScreen"> Light Screen</label>
+                <label><input type="checkbox" id="auroraVeil"> Aurora Veil</label>
+            </div>
+        </div>
+    </details>
+</div>
                 <div class="damage-result" id="damageResult">Select a move and opponent</div>
             </div>
         </div>
@@ -195,7 +239,42 @@
 </div>
 
 <script>
-    let displayValue = '';
+  // Advanced options listeners
+document.getElementById('weatherSelect')?.addEventListener('change', (e) => {
+    weather = e.target.value;
+    calculateFullDamage();
+});
+
+document.getElementById('terrainSelect')?.addEventListener('change', (e) => {
+    terrain = e.target.value;
+    calculateFullDamage();
+});
+
+document.getElementById('attackerStatusSelect')?.addEventListener('change', (e) => {
+    attackerStatus = e.target.value === 'none' ? null : e.target.value;
+    calculateFullDamage();
+});
+
+document.getElementById('criticalSelect')?.addEventListener('change', (e) => {
+    criticalHit = e.target.value === 'true';
+    calculateFullDamage();
+});
+
+document.getElementById('reflectScreen')?.addEventListener('change', (e) => {
+    screens.reflect = e.target.checked;
+    calculateFullDamage();
+});
+
+document.getElementById('lightScreen')?.addEventListener('change', (e) => {
+    screens.lightScreen = e.target.checked;
+    calculateFullDamage();
+});
+
+document.getElementById('auroraVeil')?.addEventListener('change', (e) => {
+    screens.auroraVeil = e.target.checked;
+    calculateFullDamage();
+});
+  let displayValue = '';
 
     // Define the appendNumber function
     function appendNumber(number) {
@@ -16887,7 +16966,21 @@ function renderMoveList() {
         });
     });
 }
-function calculateDamage() {
+// ============================================
+// COMPLETE GEN 9 DAMAGE CALCULATOR
+// ============================================
+
+// Damage calculation state
+let attackerBoosts = { atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
+let defenderBoosts = { atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
+let weather = "none"; // none, sun, rain, sand, snow
+let terrain = "none"; // none, electric, grassy, psychic, misty
+let screens = { reflect: false, lightScreen: false, auroraVeil: false };
+let attackerStatus = null; // none, burn, paralysis, poison, badPoison, sleep, freeze
+let defenderStatus = null;
+let criticalHit = false;
+
+function calculateFullDamage() {
     const poke = currentPokemon;
     const opp = document.getElementById('opponentSelect').value;
     const data = PKM.pokemon[poke];
@@ -16899,10 +16992,10 @@ function calculateDamage() {
     }
     
     const moveName = selectedMoves[0];
-    const moveData = MOVE_DATABASE[moveName];
+    const moveData = MOVE_DATABASE[moveName] || { type: "Normal", power: 90, category: "Physical" };
     
-    // Check if it's a status move
-    if (moveData && moveData.power === 0) {
+    // Status moves deal 0 damage
+    if (moveData.power === 0) {
         document.getElementById('damageResult').innerHTML = `
             <strong>${poke}</strong> uses <strong>${moveName}</strong><br>
             <span style="color:#efb84e;">⚠️ Status Move - Deals 0 damage</span><br>
@@ -16911,6 +17004,7 @@ function calculateDamage() {
         return;
     }
     
+    // Get SP values
     const sp = {
         hp: +document.getElementById('hpSlider').value,
         atk: +document.getElementById('atkSlider').value,
@@ -16920,44 +17014,218 @@ function calculateDamage() {
         spe: +document.getElementById('speSlider').value
     };
     
+    // Get nature
     const nature = document.getElementById('natureSelect').value;
     const natureData = NATURES[nature] || NATURES["Hardy"];
     
+    // Get item and ability
+    const item = document.getElementById('itemSelect').value;
+    const ability = data.ability || "None";
+    
+    // Base stats
     const pokeStats = data.baseStats || data["baseStats"];
     const oppStats = oppData.baseStats || oppData["baseStats"];
     
     // Determine if physical or special
-    const isPhysical = moveData ? moveData.category === "Physical" : true;
-    const attackStat = isPhysical ? pokeStats[1] : pokeStats[3];
-    const defenseStat = isPhysical ? oppStats[2] : oppStats[4];
+    const isPhysical = moveData.category === "Physical";
     
+    // Calculate attack stat
+    let attack = isPhysical ? pokeStats[1] : pokeStats[3];
+    attack += (isPhysical ? sp.atk : sp.spa);
+    
+    // Apply nature
     const natureMult = isPhysical ? (natureData.atk || 1) : (natureData.spa || 1);
-    const attack = Math.floor((attackStat + (isPhysical ? sp.atk : sp.spa)) * natureMult);
-    const defense = defenseStat;
+    attack = Math.floor(attack * natureMult);
     
+    // Apply stat boosts
+    const attackStage = isPhysical ? attackerBoosts.atk : attackerBoosts.spa;
+    attack = applyStatBoost(attack, attackStage);
+    
+    // Apply status effects
+    if (attackerStatus === 'burn' && isPhysical) {
+        attack = Math.floor(attack * 0.5);
+    }
+    
+    // Apply ability modifiers (Huge Power, Guts, etc.)
+    if (ability === 'Huge Power' || ability === 'Pure Power') {
+        attack = Math.floor(attack * 2);
+    }
+    if (ability === 'Guts' && attackerStatus) {
+        attack = Math.floor(attack * 1.5);
+    }
+    if (ability === 'Solar Power' && weather === 'sun' && !isPhysical) {
+        attack = Math.floor(attack * 1.5);
+    }
+    
+    // Calculate defense stat
+    let defense = isPhysical ? oppStats[2] : oppStats[4];
+    
+    // Apply stat boosts
+    const defenseStage = isPhysical ? defenderBoosts.def : defenderBoosts.spd;
+    defense = applyStatBoost(defense, defenseStage);
+    
+    // Apply screens
+    if (isPhysical && screens.reflect) defense *= 2;
+    if (!isPhysical && screens.lightScreen) defense *= 2;
+    if (screens.auroraVeil) defense *= 2;
+    
+    // Apply terrain defense boosts
+    if (terrain === 'misty' && moveData.type === 'Dragon') {
+        // Misty Terrain halves Dragon damage
+        defense *= 2;
+    }
+    
+    // Base damage formula (Gen 9)
+    const level = 50;
+    const power = moveData.power;
+    
+    let damage = Math.floor(Math.floor(Math.floor(2 * level / 5 + 2) * power * attack / defense) / 50) + 2;
+    
+    // ========== MULTIPLIERS ==========
+    let multiplier = 1.0;
+    
+    // STAB (Same Type Attack Bonus)
     const types = data.types || data["types"];
+    if (types.includes(moveData.type)) {
+        multiplier *= (ability === 'Adaptability') ? 2.0 : 1.5;
+    }
+    
+    // Type effectiveness
     const oppTypes = oppData.types || oppData["types"];
-    
-    // Calculate type effectiveness
-    let effectiveness = 1;
-    const moveType = moveData ? moveData.type : "Normal";
+    let effectiveness = 1.0;
     oppTypes.forEach(t => {
-        effectiveness *= PKM.typeChart[moveType]?.[t] || 1;
+        effectiveness *= PKM.typeChart[moveData.type]?.[t] || 1;
     });
+    multiplier *= effectiveness;
     
-    const power = moveData ? moveData.power : 90;
-    const stab = types.includes(moveType) ? 1.5 : 1;
+    // Critical hit (1.5x, ignores stat drops and screens)
+    if (criticalHit) {
+        multiplier *= 1.5;
+    }
     
-    const damage = Math.floor(((((2*50/5+2)*power*attack/defense)/50)+2) * stab * effectiveness * 0.925);
+    // Weather effects
+    if (weather === 'sun') {
+        if (moveData.type === 'Fire') multiplier *= 1.5;
+        if (moveData.type === 'Water') multiplier *= 0.5;
+    }
+    if (weather === 'rain') {
+        if (moveData.type === 'Water') multiplier *= 1.5;
+        if (moveData.type === 'Fire') multiplier *= 0.5;
+    }
+    
+    // Terrain effects (only affects grounded Pokémon)
+    const oppGrounded = !oppTypes.includes('Flying') && item !== 'Air Balloon';
+    if (oppGrounded) {
+        if (terrain === 'electric' && moveData.type === 'Electric') multiplier *= 1.3;
+        if (terrain === 'grassy' && moveData.type === 'Grass') multiplier *= 1.3;
+        if (terrain === 'psychic' && moveData.type === 'Psychic') multiplier *= 1.3;
+    }
+    
+    // Item boosts
+    if (item === 'Choice Band' && isPhysical) multiplier *= 1.5;
+    if (item === 'Choice Specs' && !isPhysical) multiplier *= 1.5;
+    if (item === 'Life Orb') multiplier *= 1.3;
+    if (item === 'Charcoal' && moveData.type === 'Fire') multiplier *= 1.2;
+    if (item === 'Mystic Water' && moveData.type === 'Water') multiplier *= 1.2;
+    if (item === 'Miracle Seed' && moveData.type === 'Grass') multiplier *= 1.2;
+    if (item === 'Magnet' && moveData.type === 'Electric') multiplier *= 1.2;
+    if (item === 'Black Belt' && moveData.type === 'Fighting') multiplier *= 1.2;
+    if (item === 'Sharp Beak' && moveData.type === 'Flying') multiplier *= 1.2;
+    if (item === 'Twisted Spoon' && moveData.type === 'Psychic') multiplier *= 1.2;
+    if (item === 'Black Glasses' && moveData.type === 'Dark') multiplier *= 1.2;
+    if (item === 'Spell Tag' && moveData.type === 'Ghost') multiplier *= 1.2;
+    if (item === 'Dragon Fang' && moveData.type === 'Dragon') multiplier *= 1.2;
+    if (item === 'Metal Coat' && moveData.type === 'Steel') multiplier *= 1.2;
+    if (item === 'Fairy Feather' && moveData.type === 'Fairy') multiplier *= 1.2;
+    if (item === 'Hard Stone' && moveData.type === 'Rock') multiplier *= 1.2;
+    if (item === 'Soft Sand' && moveData.type === 'Ground') multiplier *= 1.2;
+    if (item === 'Never-Melt Ice' && moveData.type === 'Ice') multiplier *= 1.2;
+    if (item === 'Poison Barb' && moveData.type === 'Poison') multiplier *= 1.2;
+    if (item === 'Silver Powder' && moveData.type === 'Bug') multiplier *= 1.2;
+    if (item === 'Silk Scarf' && moveData.type === 'Normal') multiplier *= 1.2;
+    
+    // Ability modifiers
+    if (ability === 'Sheer Force' && moveData.effect) multiplier *= 1.3;
+    if (ability === 'Tough Claws' && moveData.contact) multiplier *= 1.3;
+    if (ability === 'Strong Jaw' && moveData.bite) multiplier *= 1.5;
+    if (ability === 'Sharpness' && moveData.slicing) multiplier *= 1.5;
+    if (ability === 'Technician' && power <= 60) multiplier *= 1.5;
+    if (ability === 'Flare Boost' && attackerStatus === 'burn' && !isPhysical) multiplier *= 1.5;
+    if (ability === 'Toxic Boost' && (attackerStatus === 'poison' || attackerStatus === 'badPoison') && isPhysical) multiplier *= 1.5;
+    
+    // Apply multiplier
+    damage = Math.floor(damage * multiplier);
+    damage = Math.max(1, damage);
+    
+    // Calculate damage range (85-100% random factor)
+    const minDamage = Math.floor(damage * 0.85);
+    const maxDamage = damage;
+    
+    const minPercent = (minDamage / oppStats[0] * 100).toFixed(1);
+    const maxPercent = (maxDamage / oppStats[0] * 100).toFixed(1);
+    
+    const koChance = calculateKOChance(minDamage, maxDamage, oppStats[0]);
+    const hitsToKO = Math.ceil(oppStats[0] / damage);
     
     const effText = effectiveness === 0 ? 'Immune' : effectiveness > 1 ? 'Super Effective' : effectiveness < 1 ? 'Not Very Effective' : 'Neutral';
     
     document.getElementById('damageResult').innerHTML = `
-        <strong>${poke}</strong> (${moveName}) vs <strong>${opp}</strong><br>
-        ~${Math.max(1, damage)} damage<br>
-        <span style="color:#9ac0e0;">Effectiveness: ${effText} (${effectiveness}x)</span><br>
-        <span style="color:#7aacd0; font-size:0.85rem;">${moveData?.desc || ''}</span>
+        <div style="margin-bottom:12px;">
+            <strong>${poke}</strong> (${moveName}) vs <strong>${opp}</strong>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;">
+            <div>
+                <span style="color:#9ac0e0;">Damage:</span><br>
+                <span style="font-size:1.3rem; font-weight:700;">${minDamage} - ${maxDamage}</span>
+            </div>
+            <div>
+                <span style="color:#9ac0e0;">Percentage:</span><br>
+                <span style="font-size:1.3rem; font-weight:700;">${minPercent}% - ${maxPercent}%</span>
+            </div>
+        </div>
+        <div style="margin-bottom:12px;">
+            <span style="color:#9ac0e0;">KO Chance:</span> 
+            <span style="font-weight:700; color:${koChance === '100%' ? '#4eef7e' : koChance === '0%' ? '#ef4e4e' : '#efb84e'};">${koChance}</span>
+            ${hitsToKO <= 4 ? `<span style="margin-left:10px;">(${hitsToKO} hit${hitsToKO > 1 ? 's' : ''} to KO)</span>` : ''}
+        </div>
+        <div style="margin-bottom:8px;">
+            <span style="color:#9ac0e0;">Effectiveness:</span> ${effText} (${effectiveness}x)
+        </div>
+        <div style="color:#7aacd0; font-size:0.85rem; border-top:1px solid #2a4a7a; padding-top:8px; margin-top:8px;">
+            ${moveData.desc || 'No additional effect'}
+        </div>
     `;
+}
+
+function applyStatBoost(stat, stage) {
+    const boostTable = {
+        "-6": 0.25, "-5": 0.28, "-4": 0.33, "-3": 0.40, "-2": 0.50, "-1": 0.66,
+        "0": 1.0,
+        "1": 1.5, "2": 2.0, "3": 2.5, "4": 3.0, "5": 3.5, "6": 4.0
+    };
+    return Math.floor(stat * (boostTable[stage.toString()] || 1));
+}
+
+function calculateKOChance(min, max, hp) {
+    if (min >= hp) return "100%";
+    if (max < hp) return "0%";
+    
+    const rolls = 16;
+    let koRolls = 0;
+    for (let i = 0; i < rolls; i++) {
+        const damage = min + Math.floor((max - min) * i / (rolls - 1));
+        if (damage >= hp) koRolls++;
+    }
+    const percent = (koRolls / rolls * 100).toFixed(1);
+    return percent + "%";
+}
+
+// Update the event listener
+document.getElementById('calcDamageBtn').addEventListener('click', calculateFullDamage);
+document.getElementById('opponentSelect').addEventListener('change', calculateFullDamage);
+document.getElementById('moveSelect').addEventListener('change', calculateFullDamage);
+document.getElementById('multiplierSelect').addEventListener('change', calculateFullDamage);
+document.getElementById('boostSelect').addEventListener('change', calculateFullDamage);
 }
 function analyzeLeads() {
     if (userTeam.length < 2) {
