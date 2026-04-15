@@ -1,0 +1,119 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   CLASSIC PASTEL THEME
+   Cream background · white cards · red primary · soft shadows
+   Rounded corners · subtle borders · Press Start 2P for headings
+   ============================================================ */
+
+@layer base {
+  :root {
+    --background: 35 100% 93%;        /* #FFF2DB softer cream */
+    --foreground: 20 20% 12%;         /* warm near-black */
+    --card: 0 0% 100%;                /* pure white cards */
+    --card-foreground: 20 20% 12%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 20 20% 12%;
+    --primary: 0 100% 61%;            /* #FF3737 red */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 22 100% 82%;         /* #FFD0A6 softer peach */
+    --secondary-foreground: 20 30% 15%;
+    --muted: 35 60% 94%;              /* very light cream */
+    --muted-foreground: 20 10% 40%;
+    --accent: 22 100% 78%;            /* #FFC193 peach */
+    --accent-foreground: 20 30% 15%;
+    --destructive: 0 100% 61%;        /* same red */
+    --destructive-foreground: 0 0% 100%;
+    --border: 25 30% 84%;             /* warm beige-grey border */
+    --input: 35 80% 97%;
+    --ring: 0 100% 61%;
+    --radius: 0.75rem;                /* rounded-xl */
+  }
+
+  .dark {
+    --background: 220 15% 10%;         /* deep blue-black */
+    --foreground: 40 20% 90%;          /* warm off-white */
+    --card: 220 15% 14%;               /* dark card */
+    --card-foreground: 40 20% 90%;
+    --popover: 220 15% 14%;
+    --popover-foreground: 40 20% 90%;
+    --primary: 0 100% 64%;             /* brighter red for dark bg */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 22 60% 25%;
+    --secondary-foreground: 40 20% 90%;
+    --muted: 220 15% 18%;
+    --muted-foreground: 40 10% 55%;
+    --accent: 22 80% 35%;
+    --accent-foreground: 40 20% 90%;
+    --destructive: 0 100% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 10% 22%;
+    --input: 220 15% 16%;
+    --ring: 0 100% 64%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html,
+  body,
+  #root {
+    min-height: 100%;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    background-color: hsl(var(--background));
+  }
+
+  #root {
+    position: relative;
+    z-index: 1;
+  }
+
+  img.pixelated {
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+  }
+
+  ::selection {
+    background-color: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+  }
+}
+
+@layer utilities {
+  .font-pixel {
+    font-family: "Press Start 2P", system-ui, monospace;
+  }
+
+  /* Classic soft shadow system */
+  .shadow-soft {
+    box-shadow:
+      0 1px 2px rgba(20, 15, 10, 0.04),
+      0 4px 12px rgba(20, 15, 10, 0.06);
+  }
+  .shadow-soft-lg {
+    box-shadow:
+      0 2px 4px rgba(20, 15, 10, 0.06),
+      0 12px 32px rgba(20, 15, 10, 0.1);
+  }
+  .shadow-soft-primary {
+    box-shadow:
+      0 4px 14px rgba(255, 55, 55, 0.25);
+  }
+
+  /* Shimmer animation for progress bars */
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(200%); }
+  }
+
+  /* Subtle pixel text shadow — tiny offset for the retro headings */
+  .text-shadow-pixel {
+    text-shadow: 2px 2px 0 rgba(20, 15, 10, 0.08);
+  }
+}

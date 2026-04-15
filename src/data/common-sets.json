@@ -1,0 +1,110 @@
+{
+  "6": [
+    {
+      "name": "Sun Sweeper",
+      "ability": "Solar Power",
+      "item": "Choice Specs",
+      "nature": "Modest",
+      "moves": ["Heat Wave", "Air Slash", "Solar Beam", "Protect"],
+      "sp": { "hp": 4, "atk": 0, "def": 0, "spa": 32, "spd": 0, "spe": 30 }
+    },
+    {
+      "name": "Tailwind Support",
+      "ability": "Blaze",
+      "item": "Heat Rock",
+      "nature": "Timid",
+      "moves": ["Heat Wave", "Tailwind", "Sunny Day", "Protect"],
+      "sp": { "hp": 16, "atk": 0, "def": 0, "spa": 24, "spd": 0, "spe": 26 }
+    }
+  ],
+  "9": [
+    {
+      "name": "Bulky Sweeper",
+      "ability": "Torrent",
+      "item": "Assault Vest",
+      "nature": "Modest",
+      "moves": ["Hydro Pump", "Ice Beam", "Aura Sphere", "Earthquake"],
+      "sp": { "hp": 16, "atk": 0, "def": 8, "spa": 32, "spd": 6, "spe": 4 }
+    }
+  ],
+  "150": [
+    {
+      "name": "Special Wallbreaker",
+      "ability": "Pressure",
+      "item": "Life Orb",
+      "nature": "Timid",
+      "moves": ["Psystrike", "Ice Beam", "Aura Sphere", "Recover"],
+      "sp": { "hp": 0, "atk": 0, "def": 0, "spa": 32, "spd": 0, "spe": 32 }
+    }
+  ],
+  "248": [
+    {
+      "name": "Sand Setter",
+      "ability": "Sand Stream",
+      "item": "Assault Vest",
+      "nature": "Adamant",
+      "moves": ["Rock Slide", "Crunch", "Earthquake", "Tera Blast"],
+      "sp": { "hp": 32, "atk": 30, "def": 0, "spa": 0, "spd": 4, "spe": 0 }
+    }
+  ],
+  "376": [
+    {
+      "name": "Steel Pivot",
+      "ability": "Clear Body",
+      "item": "Weakness Policy",
+      "nature": "Adamant",
+      "moves": ["Meteor Mash", "Bullet Punch", "Earthquake", "Protect"],
+      "sp": { "hp": 12, "atk": 32, "def": 0, "spa": 0, "spd": 0, "spe": 22 }
+    }
+  ],
+  "445": [
+    {
+      "name": "Choice Scarf",
+      "ability": "Rough Skin",
+      "item": "Choice Scarf",
+      "nature": "Jolly",
+      "moves": ["Earthquake", "Outrage", "Stone Edge", "Crunch"],
+      "sp": { "hp": 0, "atk": 32, "def": 0, "spa": 0, "spd": 4, "spe": 30 }
+    }
+  ],
+  "448": [
+    {
+      "name": "Special Attacker",
+      "ability": "Inner Focus",
+      "item": "Life Orb",
+      "nature": "Timid",
+      "moves": ["Aura Sphere", "Flash Cannon", "Nasty Plot", "Protect"],
+      "sp": { "hp": 4, "atk": 0, "def": 0, "spa": 32, "spd": 0, "spe": 30 }
+    }
+  ],
+  "461": [
+    {
+      "name": "Priority Sweeper",
+      "ability": "Pickpocket",
+      "item": "Focus Sash",
+      "nature": "Jolly",
+      "moves": ["Knock Off", "Ice Shard", "Triple Axel", "Protect"],
+      "sp": { "hp": 4, "atk": 32, "def": 0, "spa": 0, "spd": 0, "spe": 30 }
+    }
+  ],
+  "468": [
+    {
+      "name": "Tailwind Setter",
+      "ability": "Serene Grace",
+      "item": "Sitrus Berry",
+      "nature": "Calm",
+      "moves": ["Air Slash", "Dazzling Gleam", "Tailwind", "Follow Me"],
+      "sp": { "hp": 32, "atk": 0, "def": 8, "spa": 12, "spd": 14, "spe": 0 }
+    }
+  ],
+  "472": [
+    {
+      "name": "Defensive Pivot",
+      "ability": "Poison Heal",
+      "item": "Toxic Orb",
+      "nature": "Impish",
+      "moves": ["Earthquake", "Knock Off", "Protect", "Substitute"],
+      "sp": { "hp": 32, "atk": 12, "def": 22, "spa": 0, "spd": 0, "spe": 0 }
+    }
+  ]
+}

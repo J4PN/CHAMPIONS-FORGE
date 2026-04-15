@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="none">
+  <!-- Outer black ring (background disc) -->
+  <circle cx="128" cy="128" r="120" fill="#1B1410"/>
+
+  <!-- Red top half -->
+  <path d="M 18 128 A 110 110 0 0 1 238 128 Z" fill="#E4463C"/>
+
+  <!-- White bottom half -->
+  <path d="M 18 128 A 110 110 0 0 0 238 128 Z" fill="#FAFAFA"/>
+
+  <!-- Middle horizontal band -->
+  <rect x="18" y="116" width="220" height="24" fill="#1B1410"/>
+
+  <!-- Center button — outer black -->
+  <circle cx="128" cy="128" r="36" fill="#1B1410"/>
+  <!-- Center button — white rim -->
+  <circle cx="128" cy="128" r="26" fill="#FAFAFA"/>
+  <!-- Center button — inner dot -->
+  <circle cx="128" cy="128" r="10" fill="#1B1410"/>
+</svg>

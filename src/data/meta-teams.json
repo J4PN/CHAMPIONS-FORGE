@@ -1,0 +1,110 @@
+[
+  {
+    "id": "sun-heavy",
+    "name": "Sun Heavy Offense",
+    "description": "Mega Charizard Y + Venusaur sun core with Incineroar support",
+    "pokemonIds": [10035, 3, 547, 727, 981, 248]
+  },
+  {
+    "id": "rain-spam",
+    "name": "Rain Spam",
+    "description": "Politoed drizzle with Azumarill + Milotic bulky water",
+    "pokemonIds": [186, 184, 350, 10024, 464, 727]
+  },
+  {
+    "id": "trick-room",
+    "name": "Trick Room Heavy Hitters",
+    "description": "Farigiraf TR with Torkoal, Snorlax and slow megas",
+    "pokemonIds": [981, 324, 143, 464, 10025, 10026]
+  },
+  {
+    "id": "tailwind-offense",
+    "name": "Tailwind Offense",
+    "description": "Whimsicott prankster tailwind + hyper offense core",
+    "pokemonIds": [547, 10034, 10049, 445, 981, 727]
+  },
+  {
+    "id": "intimidate-control",
+    "name": "Intimidate Control",
+    "description": "Incineroar + Mega Gyarados intimidate chain with Mega Garchomp finish",
+    "pokemonIds": [727, 10041, 10058, 547, 981, 324]
+  },
+  {
+    "id": "fairy-spam",
+    "name": "Fairy Spam",
+    "description": "Mega Gardevoir + Azumarill + Mimikyu fairy core",
+    "pokemonIds": [10051, 184, 778, 547, 727, 981]
+  },
+  {
+    "id": "dragon-spam",
+    "name": "Dragon Spam",
+    "description": "Mega Dragonite + Mega Garchomp + Dragapult triple dragon",
+    "pokemonIds": [10024, 10058, 887, 10034, 547, 727]
+  },
+  {
+    "id": "steel-priority",
+    "name": "Steel & Priority",
+    "description": "Mega Scizor + Mega Lucario + Aegislash priority core",
+    "pokemonIds": [10046, 10059, 681, 823, 547, 981]
+  },
+  {
+    "id": "psychic-offense",
+    "name": "Psychic Offense",
+    "description": "Mega Alakazam + Mega Gardevoir psychic hyper offense",
+    "pokemonIds": [10037, 10051, 981, 547, 727, 184]
+  },
+  {
+    "id": "hazard-control",
+    "name": "Hazard & Ghost Control",
+    "description": "Aegislash + Corviknight + Dragapult defensive pivot",
+    "pokemonIds": [681, 823, 778, 887, 547, 727]
+  },
+  {
+    "id": "stall-defensive",
+    "name": "Stall Defensive Core",
+    "description": "Hippowdon sand + Trevenant + Sableye bulky wall",
+    "pokemonIds": [450, 709, 302, 778, 681, 350]
+  },
+  {
+    "id": "weather-war",
+    "name": "Weather War",
+    "description": "Multiple weather setters (Politoed + Torkoal + Tyranitar)",
+    "pokemonIds": [186, 324, 248, 727, 547, 981]
+  },
+  {
+    "id": "pivot-chain",
+    "name": "Pivot Chain",
+    "description": "U-turn + Volt Switch spam with Rotom core",
+    "pokemonIds": [479, 727, 547, 10046, 212, 445]
+  },
+  {
+    "id": "sand-offense",
+    "name": "Sand Offense",
+    "description": "Mega Tyranitar sand rush with Garchomp + Rhyperior",
+    "pokemonIds": [10049, 10058, 464, 727, 547, 981]
+  },
+  {
+    "id": "fighting-core",
+    "name": "Fighting Core",
+    "description": "Mega Lucario + Mega Heracross + Machamp brawl team",
+    "pokemonIds": [10059, 10047, 68, 727, 547, 981]
+  },
+  {
+    "id": "sun-2",
+    "name": "Mega Zard X Offense",
+    "description": "Mega Charizard X dragon dance sweeper + sun support",
+    "pokemonIds": [10034, 324, 547, 727, 248, 3]
+  },
+  {
+    "id": "bulky-balance",
+    "name": "Bulky Balance",
+    "description": "Milotic + Dragonite + Corviknight defensive balance",
+    "pokemonIds": [350, 149, 823, 727, 547, 981]
+  },
+  {
+    "id": "ghost-spam",
+    "name": "Ghost Spam",
+    "description": "Mega Gengar + Dragapult + Aegislash ghost offense",
+    "pokemonIds": [10038, 887, 681, 727, 547, 981]
+  }
+]
