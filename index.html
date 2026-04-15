@@ -16408,20 +16408,15 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 document.getElementById('pokeSelect').addEventListener('change', function() {
-    const pokemon = DB.pokemon[this.value];
-    if (!pokemon) return;
+    const pokemon = PKM.pokemon[this.value];
+    if (!pokemon) {
+        // Handle case where the selected Pokémon does not exist
+        console.error('Error: Selected Pokémon does not exist');
+        return;
+    }
     const typeDisplay = document.getElementById('typeDisplay');
     typeDisplay.innerHTML = pokemon.types.map(type => `<span class="type-badge type-${type}">${type}</span>`).join('');
 });
-
-    initPokemonSelect();
-
-    document.getElementById('pokeSelect').addEventListener('change', function() {
-        const pokemon = DB.pokemon[this.value];
-        if (!pokemon) return;
-        const typeDisplay = document.getElementById('typeDisplay');
-        typeDisplay.innerHTML = pokemon.types.map(type => `<span class="type-badge type-${type}">${type}</span>`).join('');
-    });
 
 // Start the app
 init();
