@@ -16351,35 +16351,38 @@ function calculateDamage() {
 
 // Tab navigation event listeners
 
-document.querySelectorAll('.nav-tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-        const tabName = tab.getAttribute('data-tab');
-        document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-        tab.classList.add('active');
-        document.getElementById(tabName).classList.add('active');
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.nav-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            const tabName = tab.getAttribute('data-tab');
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            tab.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        });
+    });
+
+    function initPokemonSelect() {
+        const pokeSelect = document.getElementById('pokeSelect');
+        pokeSelect.innerHTML = '<option value="">-- Select a Pokémon --</option>';
+        Object.keys(DB.pokemon).forEach(name => {
+            const option = document.createElement('option');
+            option.value = name;
+            option.textContent = name;
+            pokeSelect.appendChild(option);
+        });
+    }
+
+    initPokemonSelect();
+
+    document.getElementById('pokeSelect').addEventListener('change', function() {
+        const pokemon = DB.pokemon[this.value];
+        if (!pokemon) return;
+        const typeDisplay = document.getElementById('typeDisplay');
+        typeDisplay.innerHTML = pokemon.types.map(type => `<span class="type-badge type-${type}">${type}</span>`).join('');
     });
 });
 
-function initPokemonSelect() {
-    const pokeSelect = document.getElementById('pokeSelect');
-    pokeSelect.innerHTML = '<option value="">-- Select a Pokémon --</option>';
-    Object.keys(DB.pokemon).forEach(name => {
-        const option = document.createElement('option');
-        option.value = name;
-        option.textContent = name;
-        pokeSelect.appendChild(option);
-    });
-}
-
-initPokemonSelect();
-
-document.getElementById('pokeSelect').addEventListener('change', function() {
-    const pokemon = DB.pokemon[this.value];
-    if (!pokemon) return;
-    const typeDisplay = document.getElementById('typeDisplay');
-    typeDisplay.innerHTML = pokemon.types.map(type => `<span class="type-badge type-${type}">${type}</span>`).join('');
-});
 // Start the app
 init();
 </script>
