@@ -173,6 +173,49 @@
 </div>
 
 <script>
+    // Define the DB.pokemon object
+const DB = {
+    pokemon: [
+        // Add your Pokémon data here
+    ]
+};
+
+// Define the initPokemonSelect function
+function initPokemonSelect() {
+    const pokeSelect = document.getElementById('pokeSelect');
+    const pokemonOptions = DB.pokemon.map(pokemon => `<option value="${pokemon.id}">${pokemon.name}</option>`).join('');
+    pokeSelect.innerHTML = pokemonOptions;
+}
+
+// Define the init function
+function init() {
+    initPokemonSelect();
+    document.getElementById('pokeSelect').addEventListener('change', function() {
+        const pokemon = DB.pokemon[this.value];
+        if (!pokemon) {
+            // Handle case where the selected Pokémon does not exist
+            return;
+        }
+        const typeDisplay = document.getElementById('typeDisplay');
+        typeDisplay.innerHTML = pokemon.types.map(type => `<span class="type-badge type-${type}">${type}</span>`).join('');
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.nav-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            const tabName = tab.getAttribute('data-tab');
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            tab.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        });
+    });
+
+    init();
+});
+
+// Rest of your code
 // ============================================
 // NATURES
 // ============================================
@@ -247,7 +290,7 @@ const TYPE_CHART = {
 // ============================================
 // POKÉMON DATABASE - PASTE YOUR FULL DATA HERE
 // ============================================
-const DB = {
+const PKM = {
   pokemon: {
     // ************************************************************
     // PASTE YOUR ENTIRE POKÉMON DATABASE HERE
@@ -16035,9 +16078,10 @@ const DB = {
     // ************************************************************
     // REPLACE THE ABOVE WITH YOUR FULL 205 POKÉMON DATA
     // ************************************************************
-  },
-  typeChart: TYPE_CHART
-};
+  }
+  const typeChart = TYPE_CHART;
+  
+;
 
 // ============================================
 // APP STATE
@@ -16361,17 +16405,14 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById(tabName).classList.add('active');
         });
     });
+});
 
-    function initPokemonSelect() {
-        const pokeSelect = document.getElementById('pokeSelect');
-        pokeSelect.innerHTML = '<option value="">-- Select a Pokémon --</option>';
-        Object.keys(DB.pokemon).forEach(name => {
-            const option = document.createElement('option');
-            option.value = name;
-            option.textContent = name;
-            pokeSelect.appendChild(option);
-        });
-    }
+document.getElementById('pokeSelect').addEventListener('change', function() {
+    const pokemon = DB.pokemon[this.value];
+    if (!pokemon) return;
+    const typeDisplay = document.getElementById('typeDisplay');
+    typeDisplay.innerHTML = pokemon.types.map(type => `<span class="type-badge type-${type}">${type}</span>`).join('');
+});
 
     initPokemonSelect();
 
@@ -16381,10 +16422,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const typeDisplay = document.getElementById('typeDisplay');
         typeDisplay.innerHTML = pokemon.types.map(type => `<span class="type-badge type-${type}">${type}</span>`).join('');
     });
-});
 
 // Start the app
 init();
 </script>
 </body>
+</html>
 </html>
