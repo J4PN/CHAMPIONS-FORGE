@@ -173,17 +173,10 @@
 </div>
 
 <script>
-    // Define the DB.pokemon object
-const DB = {
-    pokemon: [
-        // Add your Pokémon data here
-    ]
-};
-
 // Define the initPokemonSelect function
 function initPokemonSelect() {
     const pokeSelect = document.getElementById('pokeSelect');
-    const pokemonOptions = DB.pokemon.map(pokemon => `<option value="${pokemon.id}">${pokemon.name}</option>`).join('');
+    const pokemonOptions = PKM.pokemon.map(pokemon => `<option value="${pokemon.id}">${pokemon.name}</option>`).join('');
     pokeSelect.innerHTML = pokemonOptions;
 }
 
@@ -191,7 +184,7 @@ function initPokemonSelect() {
 function init() {
     initPokemonSelect();
     document.getElementById('pokeSelect').addEventListener('change', function() {
-        const pokemon = DB.pokemon[this.value];
+        const pokemon = PKM.pokemon[this.value];
         if (!pokemon) {
             // Handle case where the selected Pokémon does not exist
             return;
@@ -290,6 +283,7 @@ const TYPE_CHART = {
 // ============================================
 // POKÉMON DATABASE - PASTE YOUR FULL DATA HERE
 // ============================================
+
 const PKM = {
   pokemon: {
     // ************************************************************
@@ -16417,10 +16411,8 @@ document.getElementById('pokeSelect').addEventListener('change', function() {
     const typeDisplay = document.getElementById('typeDisplay');
     typeDisplay.innerHTML = pokemon.types.map(type => `<span class="type-badge type-${type}">${type}</span>`).join('');
 });
-
 // Start the app
 init();
 </script>
 </body>
-</html>
 </html>
