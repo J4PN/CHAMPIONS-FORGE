@@ -16161,7 +16161,7 @@ function populatePokemonLists() {
     pokeSelect.innerHTML = '';
     oppSelect.innerHTML = '';
     
-    const pokemonList = Object.keys(DB.pokemon).sort();
+    const pokemonList = Object.keys(PKM.pokemon).sort();
     pokemonList.forEach(p => {
         pokeSelect.add(new Option(p, p));
         oppSelect.add(new Option(p, p));
@@ -16178,7 +16178,7 @@ function filterPokemon() {
     const select = document.getElementById('pokeSelect');
     select.innerHTML = '';
     
-    const filtered = Object.keys(DB.pokemon).filter(p => p.toLowerCase().includes(search)).sort();
+    const filtered = Object.keys(PKM.pokemon).filter(p => p.toLowerCase().includes(search)).sort();
     filtered.forEach(p => select.add(new Option(p, p)));
     
     if (select.options.length > 0) {
@@ -16192,7 +16192,7 @@ function updatePokemon() {
     if (select.options.length === 0) return;
     
     currentPokemon = select.value;
-    const data = DB.pokemon[currentPokemon];
+    const data = PKM.pokemon[currentPokemon];
     if (!data) return;
     
     // Handle both quoted and unquoted formats
@@ -16207,7 +16207,7 @@ function updatePokemon() {
 }
 
 function renderMoveList() {
-    const data = DB.pokemon[currentPokemon];
+    const data = PKM.pokemon[currentPokemon];
     if (!data) return;
     
     const moves = data.legalMoves || data["legalMoves"] || [];
@@ -16339,8 +16339,8 @@ function runSimulation() {
 function calculateDamage() {
     const poke = currentPokemon;
     const opp = document.getElementById('opponentSelect').value;
-    const data = DB.pokemon[poke];
-    const oppData = DB.pokemon[opp];
+    const data = PKM.pokemon[poke];
+    const oppData = PKM.pokemon[opp];
     
     if (!data || !oppData || selectedMoves.length === 0) {
         document.getElementById('damageResult').innerHTML = 'Select a move and opponent';
@@ -16384,7 +16384,7 @@ function calculateDamage() {
 }
 // Update tab navigation and Pokemon select event listeners
 
-// Existing DB object definition
+// Existing PKM object definition
 
 
 // Tab navigation event listeners
