@@ -1,0 +1,23 @@
+node_modules
+dist
+.DS_Store
+*.log
+.vite
+
+# TypeScript build artifacts
+*.tsbuildinfo
+vite.config.js
+vite.config.d.ts
+
+# Editor / IDE
+.idea/
+.vscode/
+*.swp
+.claude/
+
+# OS
+Thumbs.db
+
+# Backend (deployed via scp + systemd, never via git)
+api/
+
